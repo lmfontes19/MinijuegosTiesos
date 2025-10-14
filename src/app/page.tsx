@@ -2,9 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Hero from '@/components/ui/landing/hero';
-import Stats from '@/components/ui/landing/stats';
 import ValueProposition from '@/components/ui/landing/valueProposition';
-import HowItWorks from '@/components/ui/landing/howItWorks';
 import Testimonials from '@/components/ui/landing/testimonials';
 import AboutUs from '@/components/ui/landing/aboutUs';
 import FeaturedGames from '@/components/ui/landing/featuredGames';
@@ -19,11 +17,6 @@ export default function Home() {
   useEffect(() => {
     // Handling referral code
     const urlParams = new URLSearchParams(window.location.search);
-    const refCode = urlParams.get('ref');
-  
-    if (refCode) {
-      localStorage.setItem('referralCode', refCode);
-    }
 
     // Handling password reset
     const resetToken = urlParams.get('reset');
@@ -113,9 +106,7 @@ export default function Home() {
       )}
       
       <Hero />
-      <Stats />
       <ValueProposition />
-      <HowItWorks />
       <Testimonials />
       <AboutUs />
       <FeaturedGames />
@@ -124,23 +115,5 @@ export default function Home() {
 }
 
 /*
-Arreglar esto:
-
-Notas:
-Cambiar la forma de cargar imagenes de s3 ya que revela nuestras credenciales
-Usar myCampaigns.jsx para ver los distintos status de task.
-Cuando se rechaza la submission de una task, se le debera retener balance al creador de la task por 3 dias en caso de que haya una disputa
-Cuando el mismo usuario sube image proof sobre la misma task se borra la anterior y se queda solo la nueva, hay que corregir eso.
-Falta registrar las comisiones de 50% sobre las tasks en algun lado
-Falta mandar el correo con el motivo de la denegacion de la task
-La leaderboard no paga nunca
-
-Ideas a futuro:
-Implementar notificaciones
-Tener un campo de balance para anuncios y un campo de balance de earnings de la plataforma, solo hacer retirable earnings.
-
-Monetizaciones:
- - Cobrar por tener una featured task para que haga que se muestre al principio de la lista de tasks.
- - Cobrar un 50% de lo que se le vaya a pagar a los usuarios por cada task o click, este se cobrara cuando ya se le vaya a pagar al usuario (mostrar los premios ya con la comision descontada)
- - 5% de comision sobre cada deposito.
+Quitar todo lo del codigo de referido
 */

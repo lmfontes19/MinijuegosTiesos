@@ -5,11 +5,30 @@ import { motion } from 'framer-motion';
 export default function FeaturedGames() {
   const games = [
     {
-      name: 'Puzzle Master',
-      image: '/images/placeholder.png',
-      alt: 'Puzzle game icon'
+      name: 'Snake',
+      image: '/images/snake.jpg',
+      alt: 'Snake'
+    },
+    {
+      name: 'Memorama',
+      image: '/images/memorama.jpg',
+      alt: 'Memorama'
+    },
+    {
+      name: 'Flappy Bird',
+      image: '/images/flappy.jpg',
+      alt: 'Flappy Bird'
+    },
+{
+      name: 'Coinclick',
+      image: '/images/coinclick.jpg',
+      alt: 'Coinclick'
+    },
+    {
+      name: 'Spacing Layer',
+      image: '/images/spacing.jpg',
+      alt: 'Spacing Layer'
     }
-    // More games can be added here
   ];
 
   return (
@@ -39,7 +58,9 @@ export default function FeaturedGames() {
                     className="object-contain rounded-lg"
                   />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">{game.name}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 text-center">
+                  {game.name}
+                </h3>
               </div>
             </motion.div>
           ))}

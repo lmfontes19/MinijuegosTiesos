@@ -89,7 +89,7 @@ export default function AboutUs() {
           {/* Right image */}
           <div className="relative flex-1">
             <Image
-              src="/images/placeholder.png"
+              src="/images/logo.png"
               alt="Gaming platform illustration"
               width={700}
               height={700}

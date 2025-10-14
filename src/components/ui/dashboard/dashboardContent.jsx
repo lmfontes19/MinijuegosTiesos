@@ -216,19 +216,6 @@ export const DashboardContent = () => {
         </div>
       </div>
 
-      {/* Referral Link Section */}
-      <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-4 hover:shadow-lg transition-shadow duration-300 mb-6">
-        <h3 className="text-white font-medium mb-3 uppercase">Referral Link</h3>
-        <p className="text-gray-400 text-sm mb-2">
-          Invite friends to join MinijuegosTiesos and earn bonus points for each friend that signs up
-        </p>
-        <div className="bg-[#0F172A] rounded border border-[#334155] p-2 mb-3">
-          <p className="text-[#6366F1] break-all text-sm">
-            https://minijuegos-tiesos.vercel.app/?ref={userId}
-          </p>
-        </div>
-      </div>
-
       {/* Enhanced Your Recent Earnings Section */}
       <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-4 hover:shadow-lg transition-shadow duration-300 mb-6">
         <h3 className="text-white font-medium mb-4 flex items-center">

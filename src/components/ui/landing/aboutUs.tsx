@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 export default function AboutUs() {
   return (
-    <section id="about" className="py-20 bg-[#1E293B]/50">
+    <section id="about" className="py-20 bg-[#1E293B]">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex flex-col md:flex-row items-start gap-8">
           {/* Left content */}
@@ -15,7 +15,7 @@ export default function AboutUs() {
               viewport={{ once: true }}
               className="mb-12"
             >
-              <h1 className="text-3xl font-bold text-white mb-4">A
+              <h1 className="text-3xl font-bold text-white mb-4">
                 About Us - MinijuegosTiesos
               </h1>
               <p className="text-slate-300 max-w-2xl mb-8">
@@ -37,7 +37,7 @@ export default function AboutUs() {
           {/* Right image */}
           <div className="relative flex-1">
             <Image
-              src="/images/placeholder.png"
+              src="/images/logo.png"
               alt="Illustration representing our gaming platform"
               width={700}
               height={700}

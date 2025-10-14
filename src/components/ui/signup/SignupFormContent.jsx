@@ -63,7 +63,6 @@ const SignupFormContent = () => {
     birthDay: '',
     birthMonth: '',
     birthYear: '',
-    referralCode: '',
     terms: false
   });
 
@@ -106,12 +105,6 @@ const SignupFormContent = () => {
   // Auto-detect device info and country on component mount
   useEffect(() => {
     setIsClient(true);
-
-    // Check for referral code in localStorage
-    const storedReferralCode = localStorage.getItem('referralCode');
-    if (storedReferralCode) {
-      setFormData(prev => ({ ...prev, referralCode: storedReferralCode }));
-    }
 
     // Detect device type
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -260,7 +253,6 @@ const SignupFormContent = () => {
       password: formData.password,
       gender: formData.gender,
       dateOfBirth: dateOfBirth,
-      referralCode: formData.referralCode || '',
       deviceType: formData.deviceType,
       operatingSystem: formData.operatingSystem,
       browser: formData.browser,
@@ -332,9 +324,6 @@ const SignupFormContent = () => {
       gender = 'other';
     }
 
-    // Get referral code if available
-    const referralCode = formData.referralCode || '';
-
     // Build the Google auth URL with query parameters
     const googleAuthUrl = new URL(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/auth/google`);
     googleAuthUrl.searchParams.append('deviceType', isMobile ? 'Mobile' : 'Desktop');
@@ -342,10 +331,6 @@ const SignupFormContent = () => {
     googleAuthUrl.searchParams.append('browser', browser);
     googleAuthUrl.searchParams.append('country', country);
     googleAuthUrl.searchParams.append('gender', gender);
-
-    if (referralCode) {
-      googleAuthUrl.searchParams.append('referralCode', referralCode);
-    }
 
     // Redirect to Google auth with all parameters
     window.location.href = googleAuthUrl.toString();
@@ -643,26 +628,6 @@ const SignupFormContent = () => {
                 {errors.gender && <p className="mt-1 text-red-500 text-xs">{errors.gender}</p>}
               </motion.div>
 
-              {/* Referral Code */}
-              <motion.div variants={itemVariants} className="mb-5 mt-4">
-                <label className="block text-gray-300 mb-2 text-sm">Referral Code (Optional)</label>
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                    <Award className="w-5 h-5" />
-                  </div>
-                  <input
-                    name="referralCode"
-                    type="text"
-                    value={formData.referralCode}
-                    onChange={handleChange}
-                    disabled={isLoading}
-                    placeholder="Enter referral code if you have one"
-                    className={`w-full bg-[#0F172A] border ${errors.referralCode ? 'border-red-500' : 'border-gray-700'} rounded-lg py-3 px-10 text-white focus:outline-none focus:border-[#6366F1] transition-colors`}
-                  />
-                </div>
-                {errors.referralCode && <p className="mt-1 text-red-500 text-xs">{errors.referralCode}</p>}
-              </motion.div>
-
               {/* Terms */}
               <motion.div variants={itemVariants} className="flex items-center mt-6">
                 <input
@@ -708,29 +673,6 @@ const SignupFormContent = () => {
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-700"></div>
                 </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-[#1E293B] text-gray-400">Or sign up with</span>
-                </div>
-              </motion.div>
-
-              <motion.div
-                variants={itemVariants}
-                className="mt-4"
-              >
-                <button
-                  type="button"
-                  onClick={handleGoogleSignup}
-                  className="w-full flex justify-center items-center bg-white text-gray-800 font-bold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:ring-opacity-50"
-                  disabled={isLoading}
-                >
-                  <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                    <path
-                      fill="currentColor"
-                      d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"
-                    />
-                  </svg>
-                  Continue with Google
-                </button>
               </motion.div>
 
               <motion.p
@@ -750,14 +692,15 @@ const SignupFormContent = () => {
           className="mt-12 bg-[#1E293B] p-8 rounded-xl shadow-lg text-center"
         >
           <h3 className="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#6366F1] to-[#A5B4FC]">
-            ¡Comienza a Jugar Hoy!
-          </h3>
-          <div className="flex justify-center items-center space-x-6">
-            <Award className="w-16 h-16 text-[#10B981]" />
-            <p className="text-xl text-gray-300 max-w-2xl">
-              Juega minijuegos y compite con amigos. ¡Únete a nuestra comunidad y escala en la tabla de clasificación!
-            </p>
-          </div>
+  Start Playing Today!
+</h3>
+<div className="flex justify-center items-center space-x-6">
+  <Award className="w-16 h-16 text-[#10B981]" />
+  <p className="text-xl text-gray-300 max-w-2xl">
+    Play fun mini-games and compete with your friends. Join our community and climb to the top of the leaderboard!
+  </p>
+</div>
+
         </motion.div>
       </div>
 

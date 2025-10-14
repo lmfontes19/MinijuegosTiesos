@@ -39,7 +39,7 @@ export default function Testimonials() {
   ];
 
   return (
-    <section className="py-16 px-4">
+    <section className="py-16 px-4 bg-[#1E293B]/50">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-[#6366F1] to-[#A5B4FC]">
           What Our Users Say

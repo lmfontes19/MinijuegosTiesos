@@ -10,7 +10,7 @@ export default function Hero() {
       {/* Background with dimming gradient */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/placeholder.png"
+          src="/images/hero.jpg"
           alt="Gaming background"
           fill
           quality={90}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Globe, Shield, CreditCard } from 'lucide-react';
+import { Globe, Shield, CreditCard, Gamepad2, Layers, Trophy, Zap } from 'lucide-react';
 
 export default function ValueProposition() {
   // Variants para animaciones
@@ -28,24 +28,26 @@ export default function ValueProposition() {
 
   const features = [
     { 
-      icon: Globe, 
-      title: 'Global Opportunities', 
-      description: 'Access tasks from around the world, breaking geographical barriers.',
+      icon: Gamepad2, 
+      title: 'Mini-Games Collection', 
+      description: 'Enjoy classic games like Snake, Memory Match, Flappy Bird, CoinClick, and Spacing Layer — all in one place and playable from any browser.',
       color: 'text-[#6366F1]'
     },
     { 
-      icon: Shield, 
-      title: 'Blockchain Security', 
-      description: 'Leveraging blockchain technology for transparent and secure transactions.',
+      icon: Zap, 
+      title: 'Fast and Fun Gameplay', 
+      description: 'Jump straight into action with lightweight games that load instantly and run smoothly on any device.',
       color: 'text-[#10B981]'
     },
     { 
-      icon: CreditCard, 
-      title: 'Instant Payouts', 
-      description: 'Earn points and unlock achievements instantly after completing games and challenges.',
+      icon: Trophy, 
+      title: 'Compete and Achieve', 
+      description: 'Climb the rankings, unlock achievements, and challenge your friends to beat your high scores.',
       color: 'text-[#EAB308]'
     }
   ];
+
+
 
   return (
     <section className="py-16 px-4">

@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
   LayoutGrid, Zap, Coins, Megaphone, Trophy, Wallet, Settings,
-  Menu, X, Download, Upload, User, Bell, BarChart, Loader, Users
+  Menu, X, Download, Upload, User, Bell, BarChart, Loader, Users, Gamepad2
 } from 'lucide-react';
 import { DashboardContent } from '@/components/ui/dashboard/dashboardContent';
 import { SettingsContent } from '@/components/ui/dashboard/settingsContent';
+import { MemoramaGame } from '@/components/ui/dashboard/memoramaGame';
 import { useChat } from '@/contexts/ChatContext';
 
 // Función que simula una llamada a backend para obtener el balance
@@ -142,7 +143,7 @@ const DashboardPage = () => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
       const validViews = [
-        'dashboard', 'settings'
+        'dashboard', 'settings', 'memorama'
       ];
       
       if (hash && validViews.includes(hash)) {
@@ -184,6 +185,7 @@ const DashboardPage = () => {
   const renderContent = () => {
     switch (currentView) {
       case 'settings': return <SettingsContent />;
+      case 'memorama': return <MemoramaGame />;
       default: return <DashboardContent />;
     }
   };
@@ -191,6 +193,7 @@ const DashboardPage = () => {
   // Navigation links
   const navLinks = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutGrid },
+    { id: 'memorama', label: 'Memorama', icon: Gamepad2 },
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
 

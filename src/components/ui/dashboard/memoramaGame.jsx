@@ -16,25 +16,37 @@ export const MemoramaGame = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [isNewRecord, setIsNewRecord] = useState(false);
 
-  // Símbolos para las cartas (usando emojis y símbolos)
-  const cardSymbols = [
-    '🎮', '🎯', '🎲', '🎪', '🎨', '🎭', '🎸', '🎹',
-    '🎧', '🎤', '🎺', '🥇', '🏆', '⭐', '💎', '🔥',
-    '⚡', '🌟', '💫', '🎊', '🎉', '🔮', '💝', '🎁',
-    '🚀', '🛸', '⚖️', '🔑', '💰', '👑', '🎀', '🌈'
+  // Imágenes para las cartas (usando imágenes de la carpeta memorama)
+  const cardImages = [
+    { src: '/memorama/burger.png', alt: 'Burger', name: 'burger', color: '#F59E0B' },
+    { src: '/memorama/pintora.jpg', alt: 'Pintora', name: 'pintora', color: '#EF4444' },
+    { src: '/memorama/luchador.jpg', alt: 'Luchador', name: 'luchador', color: '#10B981' },
+    { src: '/memorama/ajolote.jpg', alt: 'Ajolote', name: 'ajolote', color: '#6366F1' },
+    { src: '/memorama/hotdog.jpg', alt: 'Hot Dog', name: 'hotdog', color: '#F97316' },
+    { src: '/memorama/donut.jpg', alt: 'Donut', name: 'donut', color: '#EC4899' },
+    { src: '/memorama/ice-cream.jpg', alt: 'Ice Cream', name: 'ice-cream', color: '#06B6D4' },
+    { src: '/memorama/coffee.jpg', alt: 'Coffee', name: 'coffee', color: '#92400E' },
+    { src: '/memorama/cake.jpg', alt: 'Cake', name: 'cake', color: '#8B5CF6' },
+    { src: '/memorama/sandwich.jpg', alt: 'Sandwich', name: 'sandwich', color: '#84CC16' },
+    { src: '/memorama/cookie.jpg', alt: 'Cookie', name: 'cookie', color: '#F59E0B' },
+    { src: '/memorama/salad.jpg', alt: 'Salad', name: 'salad', color: '#10B981' },
+    { src: '/memorama/pasta.jpg', alt: 'Pasta', name: 'pasta', color: '#EF4444' },
+    { src: '/memorama/fruit.jpg', alt: 'Fruit', name: 'fruit', color: '#F97316' },
+    { src: '/memorama/popcorn.jpg', alt: 'Popcorn', name: 'popcorn', color: '#FBBF24' },
+    { src: '/memorama/pretzel.jpg', alt: 'Pretzel', name: 'pretzel', color: '#92400E' }
   ];
 
   // Inicializar cartas
   const initializeCards = useCallback(() => {
     const numPairs = difficulty / 2;
-    const selectedSymbols = cardSymbols.slice(0, numPairs);
-    const cardPairs = [...selectedSymbols, ...selectedSymbols];
+    const selectedImages = cardImages.slice(0, numPairs);
+    const cardPairs = [...selectedImages, ...selectedImages];
     
     // Mezclar las cartas
     const shuffledCards = cardPairs
-      .map((symbol, index) => ({
+      .map((imageData, index) => ({
         id: index,
-        symbol: symbol,
+        imageData: imageData,
         isFlipped: false,
         isMatched: false
       }))
@@ -90,7 +102,7 @@ export const MemoramaGame = () => {
         const firstCard = cards.find(c => c.id === firstCardId);
         const secondCard = cards.find(c => c.id === secondCardId);
 
-        if (firstCard.symbol === secondCard.symbol) {
+        if (firstCard.imageData.name === secondCard.imageData.name) {
           // Coincidencia encontrada
           const newMatchedCards = [...matchedCards, firstCardId, secondCardId];
           setMatchedCards(newMatchedCards);
@@ -325,16 +337,42 @@ export const MemoramaGame = () => {
             <div
               key={card.id}
               onClick={() => handleCardClick(card.id)}
-              className={`aspect-square rounded-lg cursor-pointer transition-all duration-300 transform hover:scale-105 ${
+              className={`aspect-square rounded-xl cursor-pointer transition-all duration-500 transform hover:scale-105 relative ${
                 card.isFlipped || card.isMatched
-                  ? 'bg-gradient-to-br from-[#F59E0B] to-[#F59E0B]/80 border-[#F59E0B]'
-                  : 'bg-gradient-to-br from-[#0F172A] to-[#1E293B] border-[#334155] hover:border-[#F59E0B]'
-              } border-2 flex items-center justify-center text-2xl font-bold`}
+                  ? 'bg-gradient-to-br from-black via-gray-500 to-gray-900 border-[#F59E0B] shadow-xl'
+                  : 'bg-gradient-to-br from-[#0F172A] to-[#1E293B] border-[#334155] hover:border-[#F59E0B] shadow-lg'
+              } border-2 flex items-center justify-center overflow-hidden`}
             >
               {card.isFlipped || card.isMatched ? (
-                <span className="text-white text-3xl">{card.symbol}</span>
+                <div className="w-full h-full p-2">
+                  <img 
+                    src={card.imageData.src}
+                    alt={card.imageData.alt}
+                    className="w-full h-full object-cover rounded-lg shadow-sm"
+                    onError={(e) => {
+                      // Fallback si la imagen no se puede cargar
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div 
+                    className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg hidden items-center justify-center"
+                    style={{ backgroundColor: card.imageData.color }}
+                  >
+                    <span className="text-white font-bold text-lg">{card.imageData.alt[0]}</span>
+                  </div>
+                </div>
               ) : (
-                <div className="w-8 h-8 bg-[#334155] rounded opacity-50"></div>
+                <div className="flex items-center justify-center w-full h-full">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#334155] to-[#475569] rounded-lg opacity-60 flex items-center justify-center">
+                    <div className="w-6 h-6 bg-[#1E293B] rounded opacity-80"></div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Efecto de brillo para cartas emparejadas */}
+              {card.isMatched && (
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#F59E0B]/20 to-transparent rounded-xl animate-pulse"></div>
               )}
             </div>
           ))}

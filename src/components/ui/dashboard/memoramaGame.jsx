@@ -19,9 +19,9 @@ export const MemoramaGame = () => {
   // Imágenes para las cartas (usando imágenes de la carpeta memorama)
   const cardImages = [
     { src: '/memorama/burger.png', alt: 'Burger', name: 'burger', color: '#F59E0B' },
-    { src: '/memorama/pintora.jpg', alt: 'Pintora', name: 'pintora', color: '#EF4444' },
-    { src: '/memorama/luchador.jpg', alt: 'Luchador', name: 'luchador', color: '#10B981' },
-    { src: '/memorama/ajolote.jpg', alt: 'Ajolote', name: 'ajolote', color: '#6366F1' },
+    { src: '/memorama/pintora.png', alt: 'Pintora', name: 'pintora', color: '#EF4444' },
+    { src: '/memorama/luchador.png', alt: 'Luchador', name: 'luchador', color: '#10B981' },
+    { src: '/memorama/ajolote.png', alt: 'Ajolote', name: 'ajolote', color: '#6366F1' },
     { src: '/memorama/hotdog.jpg', alt: 'Hot Dog', name: 'hotdog', color: '#F97316' },
     { src: '/memorama/donut.jpg', alt: 'Donut', name: 'donut', color: '#EC4899' },
     { src: '/memorama/ice-cream.jpg', alt: 'Ice Cream', name: 'ice-cream', color: '#06B6D4' },

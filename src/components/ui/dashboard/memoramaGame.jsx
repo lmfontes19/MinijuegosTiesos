@@ -22,18 +22,18 @@ export const MemoramaGame = () => {
     { src: '/memorama/pintora.png', alt: 'Pintora', name: 'pintora', color: '#EF4444' },
     { src: '/memorama/luchador.png', alt: 'Luchador', name: 'luchador', color: '#10B981' },
     { src: '/memorama/ajolote.png', alt: 'Ajolote', name: 'ajolote', color: '#6366F1' },
-    { src: '/memorama/hotdog.jpg', alt: 'Hot Dog', name: 'hotdog', color: '#F97316' },
-    { src: '/memorama/donut.jpg', alt: 'Donut', name: 'donut', color: '#EC4899' },
-    { src: '/memorama/ice-cream.jpg', alt: 'Ice Cream', name: 'ice-cream', color: '#06B6D4' },
-    { src: '/memorama/coffee.jpg', alt: 'Coffee', name: 'coffee', color: '#92400E' },
-    { src: '/memorama/cake.jpg', alt: 'Cake', name: 'cake', color: '#8B5CF6' },
-    { src: '/memorama/sandwich.jpg', alt: 'Sandwich', name: 'sandwich', color: '#84CC16' },
-    { src: '/memorama/cookie.jpg', alt: 'Cookie', name: 'cookie', color: '#F59E0B' },
-    { src: '/memorama/salad.jpg', alt: 'Salad', name: 'salad', color: '#10B981' },
-    { src: '/memorama/pasta.jpg', alt: 'Pasta', name: 'pasta', color: '#EF4444' },
-    { src: '/memorama/fruit.jpg', alt: 'Fruit', name: 'fruit', color: '#F97316' },
-    { src: '/memorama/popcorn.jpg', alt: 'Popcorn', name: 'popcorn', color: '#FBBF24' },
-    { src: '/memorama/pretzel.jpg', alt: 'Pretzel', name: 'pretzel', color: '#92400E' }
+    { src: '/memorama/baby-feeder.png', alt: 'Baby Feeder', name: 'baby-feeder', color: '#F97316' },
+    { src: '/memorama/bat.png', alt: 'Bat', name: 'bat', color: '#EC4899' },
+    { src: '/memorama/beer.png', alt: 'Beer', name: 'beer', color: '#06B6D4' },
+    { src: '/memorama/bible.png', alt: 'Bible', name: 'bible', color: '#92400E' },
+    { src: '/memorama/seagull.png', alt: 'Seagull', name: 'seagull', color: '#8B5CF6' },
+    { src: '/memorama/sandwich.png', alt: 'Sandwich', name: 'sandwich', color: '#84CC16' },
+    { src: '/memorama/cookie.png', alt: 'Cookie', name: 'cookie', color: '#F59E0B' },
+    { src: '/memorama/salad.png', alt: 'Salad', name: 'salad', color: '#10B981' },
+    { src: '/memorama/pasta.png', alt: 'Pasta', name: 'pasta', color: '#EF4444' },
+    { src: '/memorama/fruit.png', alt: 'Fruit', name: 'fruit', color: '#F97316' },
+    { src: '/memorama/popcorn.png', alt: 'Popcorn', name: 'popcorn', color: '#FBBF24' },
+    { src: '/memorama/pretzel.png', alt: 'Pretzel', name: 'pretzel', color: '#92400E' }
   ];
 
   // Inicializar cartas

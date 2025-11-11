@@ -16,7 +16,6 @@ export const MemoramaGame = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [isNewRecord, setIsNewRecord] = useState(false);
 
-  // Imágenes para las cartas (usando imágenes de la carpeta memorama)
   const cardImages = [
     { src: '/memorama/burger.png', alt: 'Burger', name: 'burger', color: '#F59E0B' },
     { src: '/memorama/pintora.png', alt: 'Pintora', name: 'pintora', color: '#EF4444' },
@@ -27,13 +26,13 @@ export const MemoramaGame = () => {
     { src: '/memorama/beer.png', alt: 'Beer', name: 'beer', color: '#06B6D4' },
     { src: '/memorama/bible.png', alt: 'Bible', name: 'bible', color: '#92400E' },
     { src: '/memorama/seagull.png', alt: 'Seagull', name: 'seagull', color: '#8B5CF6' },
-    { src: '/memorama/sandwich.png', alt: 'Sandwich', name: 'sandwich', color: '#84CC16' },
-    { src: '/memorama/cookie.png', alt: 'Cookie', name: 'cookie', color: '#F59E0B' },
-    { src: '/memorama/salad.png', alt: 'Salad', name: 'salad', color: '#10B981' },
-    { src: '/memorama/pasta.png', alt: 'Pasta', name: 'pasta', color: '#EF4444' },
-    { src: '/memorama/fruit.png', alt: 'Fruit', name: 'fruit', color: '#F97316' },
-    { src: '/memorama/popcorn.png', alt: 'Popcorn', name: 'popcorn', color: '#FBBF24' },
-    { src: '/memorama/pretzel.png', alt: 'Pretzel', name: 'pretzel', color: '#92400E' }
+    { src: '/memorama/mortarboard.png', alt: 'Mortarboard', name: 'mortarboard', color: '#84CC16' },
+    { src: '/memorama/needle.png', alt: 'Needle', name: 'needle', color: '#F59E0B' },
+    { src: '/memorama/cap.png', alt: 'Cap', name: 'cap', color: '#10B981' },
+    { src: '/memorama/tree.png', alt: 'Tree', name: 'tree', color: '#EF4444' },
+    { src: '/memorama/santacap.png', alt: 'Santa Cap', name: 'santacap', color: '#F97316' },
+    { src: '/memorama/firefighter.png', alt: 'Firefighter', name: 'firefighter', color: '#FBBF24' },
+    { src: '/memorama/bow.png', alt: 'Bow', name: 'bow', color: '#92400E' }
   ];
 
   // Inicializar cartas

@@ -254,7 +254,7 @@ export const CoinClickGame = () => {
             }}
           >
             <div className="w-16 h-16 bg-gradient-to-br from-[#8B4513] to-[#654321] rounded-full flex items-center justify-center text-3xl font-bold border-4 border-[#A0522D] shadow-xl">
-              🤖
+              BOT
             </div>
           </div>
 
@@ -274,7 +274,7 @@ export const CoinClickGame = () => {
                   ? 'bg-gradient-to-br from-[#FCD34D] to-[#F59E0B] border-[#FBBF24] hover:from-[#FEF08A] hover:to-[#FCD34D]' 
                   : 'bg-gradient-to-br from-[#1F2937] to-[#111827] border-[#374151] hover:from-[#374151] hover:to-[#1F2937]'
               }`}>
-                {obj.type === 'coin' ? '🪙' : '💣'}
+                {obj.type === 'coin' ? '$' : 'X'}
               </div>
             </div>
           ))}

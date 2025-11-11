@@ -1,4 +1,4 @@
-// Hook para manejar high scores de todos los minijuegos
+// Hook to manage high scores for all mini-games
 'use client'
 import { useState, useEffect } from 'react';
 
@@ -11,7 +11,7 @@ export const useGameHighScores = () => {
     spacingLayer: 0
   });
 
-  // Cargar high scores del localStorage
+  // Load high scores from localStorage
   useEffect(() => {
     const loadHighScores = () => {
       const scores = {
@@ -26,7 +26,7 @@ export const useGameHighScores = () => {
 
     loadHighScores();
 
-    // Escuchar cambios en localStorage
+    // Listen for changes in localStorage
     const handleStorageChange = (e) => {
       if (e.key && e.key.includes('_highScore')) {
         loadHighScores();
@@ -35,7 +35,7 @@ export const useGameHighScores = () => {
 
     window.addEventListener('storage', handleStorageChange);
     
-    // También escuchar eventos personalizados para cambios en la misma pestaña
+    // Also listen for custom events for changes in the same tab
     const handleHighScoreUpdate = () => {
       loadHighScores();
     };
@@ -48,16 +48,16 @@ export const useGameHighScores = () => {
     };
   }, []);
 
-  // Función para actualizar un high score
+  // Function to update a high score
   const updateHighScore = (game, score) => {
     const currentScore = highScores[game] || 0;
     
-    // Para memorama, un menor tiempo es mejor
+    // For memorama, a lower time is better
     let isNewRecord = false;
     if (game === 'memorama') {
       isNewRecord = currentScore === 0 || score < currentScore;
     } else {
-      // Para otros juegos, un mayor puntaje es mejor
+      // For other games, a higher score is better
       isNewRecord = score > currentScore;
     }
     
@@ -68,7 +68,7 @@ export const useGameHighScores = () => {
         [game]: score
       }));
       
-      // Disparar evento personalizado para notificar el cambio
+      // Trigger custom event to notify the change
       window.dispatchEvent(new CustomEvent('highScoreUpdated', {
         detail: { game, score, isNewRecord: true }
       }));
@@ -79,12 +79,12 @@ export const useGameHighScores = () => {
     return false;
   };
 
-  // Función para obtener el high score de un juego específico
+  // Function to get the high score of a specific game
   const getHighScore = (game) => {
     return highScores[game] || 0;
   };
 
-  // Función para resetear todos los high scores
+  // Function to reset all high scores
   const resetAllHighScores = () => {
     Object.keys(highScores).forEach(game => {
       localStorage.removeItem(`${game}_highScore`);
@@ -99,12 +99,12 @@ export const useGameHighScores = () => {
     window.dispatchEvent(new CustomEvent('highScoreUpdated'));
   };
 
-  // Función para exportar datos de high scores
+  // Function to export high scores data
   const exportHighScores = () => {
     return JSON.stringify(highScores, null, 2);
   };
 
-  // Función para importar datos de high scores
+  // Function to import high scores data
   const importHighScores = (scoresData) => {
     try {
       const scores = JSON.parse(scoresData);

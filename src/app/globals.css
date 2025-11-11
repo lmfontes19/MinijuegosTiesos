@@ -42,7 +42,7 @@ body {
     }
   }
 
-  /* Animaciones para el módulo Earn */
+  /* Animations for the Earn module */
   .animate-fadeIn {
     animation: fadeIn 0.4s ease-in-out;
   }
@@ -67,7 +67,7 @@ body {
     animation: fadeIn 0.3s ease-in-out;
   }
 
-  /* Animaciones para cartas del memorama */
+  /* Animations for memory game cards */
   .card-flip {
     animation: cardFlip 0.6s ease-in-out;
   }
@@ -168,7 +168,7 @@ body {
   }
 }
 
-/* Estilo para ajustar el dashboard cuando el chat está abierto */
+/* Style to adjust the dashboard when the chat is open */
 .chat-open-adjustment {
   transition: transform 0.3s ease-out;
 }

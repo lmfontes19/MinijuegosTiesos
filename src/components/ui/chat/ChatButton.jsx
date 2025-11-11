@@ -10,37 +10,37 @@ const ChatButton = () => {
   useEffect(() => {
     const checkWebSocketConnection = async () => {
       try {
-        // Primero verificamos si el servidor está activo
+        // First we check if the server is active
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/ws-test`);
         const data = await response.json();
         
         if (!data.status || data.status !== 'active') {
           setConnectionStatus('server-error');
-          console.error('El servidor WebSocket no está activo', data);
+          console.error('The WebSocket server is not active', data);
           return;
         }
         
-        // Ahora intentamos establecer una conexión WebSocket
+        // Now we try to establish a WebSocket connection
         const ws = new WebSocket(data.wsEndpoint);
         
         ws.onopen = () => {
-          console.log('Conexión WebSocket establecida correctamente');
+          console.log('WebSocket connection established successfully');
           setConnectionStatus('connected');
-          // Cerramos esta conexión de prueba
+          // We close this test connection
           setTimeout(() => {
             ws.close();
           }, 500);
         };
         
         ws.onerror = (error) => {
-          console.error('Error en la conexión WebSocket:', error);
+          console.error('Error in WebSocket connection:', error);
           setConnectionStatus('error');
         };
         
-        // Si no se conecta en 3 segundos, asumimos que hay un problema
+        // If it doesn't connect in 3 seconds, we assume there's a problem
         const timeout = setTimeout(() => {
           if (ws.readyState !== WebSocket.OPEN) {
-            console.error('Timeout al intentar conectar con el WebSocket');
+            console.error('Timeout trying to connect to WebSocket');
             setConnectionStatus('timeout');
             ws.close();
           }
@@ -53,7 +53,7 @@ const ChatButton = () => {
           }
         };
       } catch (error) {
-        console.error('Error al verificar la conexión WebSocket:', error);
+        console.error('Error verifying WebSocket connection:', error);
         setConnectionStatus('error');
       }
     };
@@ -71,7 +71,7 @@ const ChatButton = () => {
       
       {connectionStatus !== 'connected' && connectionStatus !== 'checking' && (
         <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" 
-              title="Problema con la conexión al chat">
+              title="Problem with chat connection">
         </span>
       )}
     </button>

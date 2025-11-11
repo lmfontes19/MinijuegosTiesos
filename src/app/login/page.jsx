@@ -17,7 +17,7 @@ import GoogleUserDataModal from '@/components/ui/auth/GoogleUserDataModal';
 import { handleGoogleRedirect, updateGoogleUserProfile, redirectToDashboard } from '@/lib/auth';
 import GoogleAuthError from '@/components/ui/GoogleAuthError';
 
-// Importación dinámica del componente LoginForm para evitar problemas con useSearchParams
+// Dynamic import of LoginForm component to avoid issues with useSearchParams
 const LoginFormContent = dynamic(() => import('@/components/ui/login/LoginFormContent'), { 
   ssr: false,
   loading: () => <LoginFormLoading />
@@ -44,7 +44,7 @@ const LoginFormLoading = () => (
   </section>
 );
 
-// Componente principal que será exportado
+// Main component to be exported
 const LoginPage = () => {
   return (
     <Suspense fallback={<LoginFormLoading />}>

@@ -179,7 +179,7 @@ export const SnakeGame = () => {
             </div>
             <h1 className="text-3xl font-bold text-white mb-2">Snake Game</h1>
             <p className="text-gray-400">
-              Mueve la serpiente para comer manzanas. ¡No choques con las paredes ni contigo mismo!
+              Move the snake to eat apples. Don't crash into the walls or yourself!
             </p>
           </div>
 
@@ -187,8 +187,8 @@ export const SnakeGame = () => {
             <div className="mb-6 bg-[#0F172A]/40 rounded-lg p-4 border border-[#334155]">
               <div className="flex items-center justify-center">
                 <Trophy className="w-5 h-5 text-[#10B981] mr-2" />
-                <span className="text-white">Mejor puntuación: </span>
-                <span className="text-[#10B981] font-bold ml-1">{highScore} manzanas</span>
+                <span className="text-white">Best score: </span>
+                <span className="text-[#10B981] font-bold ml-1">{highScore} apples</span>
               </div>
             </div>
           )}
@@ -207,7 +207,7 @@ export const SnakeGame = () => {
             <div className="bg-[#0F172A]/40 rounded-lg p-4 border border-[#334155]">
               <Target className="w-5 h-5 text-[#EF4444] mx-auto mb-3" />
               <div className="text-white font-medium">Objetivo</div>
-              <div className="text-gray-400">Come 🍎 evita 💀</div>
+              <div className="text-gray-400">Eat apples, avoid walls</div>
             </div>
           </div>
 
@@ -216,7 +216,7 @@ export const SnakeGame = () => {
             className="bg-[#10B981] hover:bg-[#10B981]/90 text-white px-8 py-3 rounded-lg font-medium transition-colors flex items-center mx-auto"
           >
             <Play className="w-5 h-5 mr-2" />
-            Comenzar Juego
+            Start Game
           </button>
         </div>
       </div>
@@ -230,11 +230,11 @@ export const SnakeGame = () => {
           <div className="flex items-center space-x-6">
             <div className="flex items-center">
               <Gamepad2 className="w-5 h-5 text-[#10B981] mr-2" />
-              <span className="text-white font-medium">Puntuación: {score}</span>
+              <span className="text-white font-medium">Score: {score}</span>
             </div>
             <div className="flex items-center">
               <Trophy className="w-5 h-5 text-[#F59E0B] mr-2" />
-              <span className="text-white font-medium">Récord: {highScore}</span>
+              <span className="text-white font-medium">Record: {highScore}</span>
             </div>
           </div>
 
@@ -253,15 +253,15 @@ export const SnakeGame = () => {
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
           <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-8 text-center max-w-md">
             <Skull className="w-16 h-16 text-[#EF4444] mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-white mb-4">💀 Fin del juego</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">Game Over</h2>
             <div className="space-y-2 mb-6">
               <p className="text-gray-300">
-                Puntuación final: <span className="text-[#10B981] font-bold">{score}</span>
+                Final score: <span className="text-[#10B981] font-bold">{score}</span>
               </p>
               {isNewRecord && (
                 <p className="text-[#10B981] font-bold flex items-center justify-center">
                   <Star className="w-4 h-4 mr-1" />
-                  ¡Nuevo récord!
+                  New record!
                 </p>
               )}
             </div>
@@ -270,17 +270,17 @@ export const SnakeGame = () => {
                 onClick={startGame}
                 className="bg-[#10B981] hover:bg-[#10B981]/90 text-white px-6 py-3 rounded-lg font-medium transition-colors flex-1"
               >
-                Jugar de nuevo
+                Play Again
               </button>
               <button
                 onClick={backToMenu}
                 className="bg-[#6366F1] hover:bg-[#6366F1]/90 text-white px-6 py-3 rounded-lg font-medium transition-colors flex-1"
               >
-                Menú
+                Menu
               </button>
             </div>
             <p className="text-gray-400 text-sm mt-4">
-              O presiona <kbd className="bg-[#334155] px-2 py-1 rounded text-white">R</kbd> para reiniciar
+              Or press <kbd className="bg-[#334155] px-2 py-1 rounded text-white">R</kbd> to restart
             </p>
           </div>
         </div>
@@ -288,9 +288,9 @@ export const SnakeGame = () => {
 
       <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-6">
         <div className="text-center mb-4">
-          <h3 className="text-xl font-bold text-white mb-2">¡Come las manzanas rojas 🍎!</h3>
+          <h3 className="text-xl font-bold text-white mb-2">Eat the red apples!</h3>
           <p className="text-gray-400 text-sm">
-            Usa las flechas ↑↓←→ o WASD para moverte
+            Use arrow keys ↑↓←→ or WASD to move
           </p>
         </div>
 
@@ -306,14 +306,14 @@ export const SnakeGame = () => {
         <div className="text-center mt-4">
           <div className="inline-block bg-[#0F172A]/40 rounded-lg px-6 py-3 border border-[#334155]">
             <span className="text-white font-bold text-lg">
-              Puntuación: <span className="text-[#10B981]">{score}</span>
+              Score: <span className="text-[#10B981]">{score}</span>
             </span>
           </div>
         </div>
 
         <div className="mt-4 text-center text-gray-400 text-sm">
-          <p>🟩 = Serpiente | 🍎 = Comida</p>
-          <p className="mt-1">Presiona cualquier flecha o WASD para comenzar a moverte</p>
+          <p>■ = Snake | ● = Food</p>
+          <p className="mt-1">Press any arrow key or WASD to start moving</p>
         </div>
       </div>
     </div>

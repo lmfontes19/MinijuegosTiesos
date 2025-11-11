@@ -196,7 +196,7 @@ export const SpacingLayerGame = () => {
   };
 
   const enemyShoot = () => {
-    if (frameCountRef.current - lastEnemyBulletRef.current < 60) return; // Reducido de 120 a 60
+    if (frameCountRef.current - lastEnemyBulletRef.current < 60) return; // Reduced from 120 to 60
     
     const bottomEnemies = enemiesRef.current.filter(enemy => {
       return !enemiesRef.current.some(otherEnemy => 
@@ -205,7 +205,7 @@ export const SpacingLayerGame = () => {
     });
 
     if (bottomEnemies.length > 0) {
-      // En niveles más altos, pueden disparar múltiples enemigos a la vez
+      // At higher levels, multiple enemies can shoot at once
       const shotsCount = Math.min(3, Math.floor(level / 2) + 1);
       
       for (let i = 0; i < shotsCount && i < bottomEnemies.length; i++) {
@@ -353,7 +353,7 @@ export const SpacingLayerGame = () => {
       });
     }
 
-    // Enemy shooting (adjust frequency based on level) - más frecuente y escalable
+    // Enemy shooting (adjust frequency based on level) - more frequent and scalable
     if (frameCountRef.current % Math.max(30, 80 - level * 8) === 0) {
       enemyShoot();
     }
@@ -540,9 +540,9 @@ export const SpacingLayerGame = () => {
             <div className="bg-[#8B5CF6]/10 p-3 md:p-4 rounded-full w-16 h-16 md:w-20 md:h-20 mx-auto mb-4">
               <Rocket className="w-10 h-10 md:w-12 md:h-12 text-[#8B5CF6] mx-auto" />
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Spacing Layer</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Space Layer</h1>
             <p className="text-gray-400 text-sm md:text-base">
-              ¡Defiende la Tierra de la invasión alienígena! Dispara y sobrevive a las oleadas.
+              Defend Earth from the alien invasion! Shoot and survive the waves.
             </p>
           </div>
 
@@ -550,7 +550,7 @@ export const SpacingLayerGame = () => {
             <div className="mb-6 bg-[#0F172A]/40 rounded-lg p-3 md:p-4 border border-[#334155]">
               <div className="flex items-center justify-center">
                 <Trophy className="w-4 h-4 md:w-5 md:h-5 text-[#8B5CF6] mr-2" />
-                <span className="text-white text-sm md:text-base">Mejor nivel alcanzado: </span>
+                <span className="text-white text-sm md:text-base">Best level reached: </span>
                 <span className="text-[#8B5CF6] font-bold ml-1 text-sm md:text-base">{highScore}</span>
               </div>
             </div>
@@ -564,34 +564,34 @@ export const SpacingLayerGame = () => {
               </div>
               <div className="text-white font-medium text-sm">Mover</div>
               <div className="text-gray-400 text-xs md:text-sm">Flechas ←→ o A/D</div>
-              <div className="text-gray-400 text-xs mt-1">📱 Touch: Toca los lados</div>
+              <div className="text-gray-400 text-xs mt-1">Touch: Toca los lados</div>
             </div>
             
             <div className="bg-[#0F172A]/40 rounded-lg p-3 md:p-4 border border-[#334155]">
               <Zap className="w-4 h-4 md:w-5 md:h-5 text-[#10B981] mx-auto mb-3" />
-              <div className="text-white font-medium text-sm">Disparar</div>
-              <div className="text-gray-400 text-xs md:text-sm">Barra espaciadora (mantén presionado)</div>
-              <div className="text-gray-400 text-xs mt-1">📱 Touch: Toca arriba</div>
+              <div className="text-white font-medium text-sm">Shoot</div>
+              <div className="text-gray-400 text-xs md:text-sm">Spacebar (hold down)</div>
+              <div className="text-gray-400 text-xs mt-1">Touch: Tap up</div>
             </div>
             
             <div className="bg-[#0F172A]/40 rounded-lg p-3 md:p-4 border border-[#334155]">
               <Target className="w-4 h-4 md:w-5 md:h-5 text-[#EF4444] mx-auto mb-3" />
-              <div className="text-white font-medium text-sm">Objetivo</div>
-              <div className="text-gray-400 text-xs md:text-sm">Elimina todos los aliens</div>
+              <div className="text-white font-medium text-sm">Objective</div>
+              <div className="text-gray-400 text-xs md:text-sm">Eliminate all aliens</div>
             </div>
           </div>
 
-          <div className="bg-[#0F172A]/40 rounded-lg p-3 md:p-4 border border-[#334155] mb-6 md:mb-8">
-            <h3 className="text-white font-medium mb-2 text-sm md:text-base">👾 Enemigos y Puntuación</h3>
+          <div className="bg-[#0F172A]/40 rounded-lg p-3 md:p-4 border border-[#334155] mb-6 md:mb-8">D
+            <h3 className="text-white font-medium mb-2 text-sm md:text-base">Enemies and Score</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs md:text-sm">
               <div className="text-gray-400">
-                <span className="text-[#EF4444]">■</span> Rápidos: 30 pts
+                <span className="text-[#EF4444]">■</span> Fast: 30 pts
               </div>
               <div className="text-gray-400">
-                <span className="text-[#F59E0B]">■</span> Medios: 20 pts
+                <span className="text-[#F59E0B]">■</span> Medium: 20 pts
               </div>
               <div className="text-gray-400">
-                <span className="text-[#8B5CF6]">■</span> Lentos: 10 pts
+                <span className="text-[#8B5CF6]">■</span> Slow: 10 pts
               </div>
             </div>
           </div>
@@ -601,7 +601,7 @@ export const SpacingLayerGame = () => {
             className="bg-[#8B5CF6] hover:bg-[#8B5CF6]/90 text-white px-6 md:px-8 py-2 md:py-3 rounded-lg font-medium transition-colors flex items-center mx-auto text-sm md:text-base"
           >
             <Play className="w-4 h-4 md:w-5 md:h-5 mr-2" />
-            Comenzar Misión
+            Start Mission
           </button>
         </div>
       </div>
@@ -615,18 +615,18 @@ export const SpacingLayerGame = () => {
           <div className="flex items-center space-x-3 md:space-x-6">
             <div className="flex items-center">
               <Gamepad2 className="w-4 h-4 md:w-5 md:h-5 text-[#8B5CF6] mr-2" />
-              <span className="text-white font-medium text-sm md:text-base">Nivel: {level}</span>
+              <span className="text-white font-medium text-sm md:text-base">Level: {level}</span>
             </div>
             <div className="flex items-center">
               <Trophy className="w-4 h-4 md:w-5 md:h-5 text-[#F59E0B] mr-2" />
-              <span className="text-white font-medium text-sm md:text-base">Puntuación: {score}</span>
+              <span className="text-white font-medium text-sm md:text-base">Score: {score}</span>
             </div>
             <div className="flex items-center">
-              <span className="text-white font-medium text-sm md:text-base">Vidas: {'❤️'.repeat(Math.max(0, lives))}</span>
+              <span className="text-white font-medium text-sm md:text-base">Lives: {Array(Math.max(0, lives)).fill('♥').join(' ')}</span>
             </div>
             <div className="flex items-center">
               <Target className="w-4 h-4 md:w-5 md:h-5 text-[#EF4444] mr-2" />
-              <span className="text-white font-medium text-sm md:text-base">Enemigos: {enemiesRef.current.length}</span>
+              <span className="text-white font-medium text-sm md:text-base">Enemies: {enemiesRef.current.length}</span>
             </div>
           </div>
 
@@ -645,18 +645,18 @@ export const SpacingLayerGame = () => {
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
           <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-6 md:p-8 text-center max-w-md w-full">
             <Skull className="w-12 h-12 md:w-16 md:h-16 text-[#EF4444] mx-auto mb-4" />
-            <h2 className="text-xl md:text-2xl font-bold text-white mb-4">🚀 Misión Terminada</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-white mb-4">Mission Ended</h2>
             <div className="space-y-2 mb-6">
               <p className="text-gray-300 text-sm md:text-base">
-                Nivel alcanzado: <span className="text-[#8B5CF6] font-bold">{level}</span>
+                Level reached: <span className="text-[#8B5CF6] font-bold">{level}</span>
               </p>
               <p className="text-gray-300 text-sm md:text-base">
-                Puntuación final: <span className="text-[#10B981] font-bold">{score}</span>
+                Final score: <span className="text-[#10B981] font-bold">{score}</span>
               </p>
               {isNewRecord && (
                 <p className="text-[#8B5CF6] font-bold flex items-center justify-center text-sm md:text-base">
                   <Star className="w-4 h-4 mr-1" />
-                  ¡Nuevo récord de nivel!
+                  New level record!
                 </p>
               )}
             </div>
@@ -665,17 +665,17 @@ export const SpacingLayerGame = () => {
                 onClick={startGame}
                 className="bg-[#8B5CF6] hover:bg-[#8B5CF6]/90 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-medium transition-colors flex-1 text-sm md:text-base"
               >
-                Nueva Misión
+                New Mission
               </button>
               <button
                 onClick={backToMenu}
                 className="bg-[#6366F1] hover:bg-[#6366F1]/90 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-medium transition-colors flex-1 text-sm md:text-base"
               >
-                Menú
+                Menu
               </button>
             </div>
             <p className="text-gray-400 text-xs md:text-sm mt-4">
-              O presiona <kbd className="bg-[#334155] px-2 py-1 rounded text-white">R</kbd> para reiniciar
+              Or press <kbd className="bg-[#334155] px-2 py-1 rounded text-white">R</kbd> to restart
             </p>
           </div>
         </div>
@@ -683,18 +683,18 @@ export const SpacingLayerGame = () => {
 
       <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-3 md:p-6">
         <div className="text-center mb-4">
-          <h3 className="text-lg md:text-xl font-bold text-white mb-2">🚀 Defiende la Tierra</h3>
+          <h3 className="text-lg md:text-xl font-bold text-white mb-2">Defend the Earth</h3>
           <p className="text-gray-400 text-xs md:text-sm">
-            <span className="hidden md:inline">Muévete con </span>
+            <span className="hidden md:inline">Move with </span>
             <kbd className="bg-[#334155] px-1 md:px-2 py-1 rounded text-white mx-1">←→</kbd> 
-            <span className="hidden md:inline"> o </span>
+            <span className="hidden md:inline"> or </span>
             <kbd className="bg-[#334155] px-1 md:px-2 py-1 rounded text-white mx-1">A/D</kbd>, 
-            <span className="hidden md:inline"> mantén </span>
-            <kbd className="bg-[#334155] px-1 md:px-2 py-1 rounded text-white mx-1">Espacio</kbd>
-            <span className="hidden md:inline"> para disparar</span>
+            <span className="hidden md:inline"> hold </span>
+            <kbd className="bg-[#334155] px-1 md:px-2 py-1 rounded text-white mx-1">Space</kbd>
+            <span className="hidden md:inline"> to shoot</span>
           </p>
           <p className="text-gray-400 text-xs mt-1 md:hidden">
-            📱 Toca los lados para moverte, toca arriba para disparar
+            Touch: Toca los lados para moverte, toca arriba para disparar
           </p>
         </div>
 
@@ -714,9 +714,9 @@ export const SpacingLayerGame = () => {
         </div>
 
         <div className="mt-4 text-center text-gray-400 text-xs md:text-sm">
-          <p>🟢 = Tu nave | 👾 = Enemigos | 🟢• = Tus disparos | 🔴• = Disparos enemigos</p>
-          <p className="mt-1 hidden md:block">¡Elimina todos los alienígenas para pasar al siguiente nivel!</p>
-          <p className="mt-1 md:hidden">📱 Toca para jugar - ¡Elimina todos los aliens!</p>
+          <p>● = Your ship | ▲ = Enemies | ● = Your shots | ● = Enemy shots</p>
+          <p className="mt-1 hidden md:block">Eliminate all aliens to advance to the next level!</p>
+          <p className="mt-1 md:hidden">Tap to play - Eliminate all aliens!</p>
         </div>
       </div>
     </div>

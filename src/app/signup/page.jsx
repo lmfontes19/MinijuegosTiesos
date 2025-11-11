@@ -2,7 +2,7 @@
 import React, { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 
-// Importación dinámica del contenido del formulario para evitar problemas con useSearchParams
+// Dynamic import of form content to avoid issues with useSearchParams
 const SignupFormContent = dynamic(() => import('@/components/ui/signup/SignupFormContent'), { 
   ssr: false,
   loading: () => <SignupFormLoading />
@@ -29,7 +29,7 @@ const SignupFormLoading = () => (
   </section>
 );
 
-// Componente principal que será exportado
+// Main component to be exported
 const SignupPage = () => {
   return (
     <Suspense fallback={<SignupFormLoading />}>

@@ -2,13 +2,13 @@ import React from 'react';
 import { AlertTriangle, Info } from 'lucide-react';
 
 /**
- * Componente para mostrar mensajes de error relacionados con la autenticación de Google
+ * Component to display error messages related to Google authentication
  * 
  * @param {Object} props
- * @param {string} props.type - Tipo de mensaje: "error" o "info"
- * @param {string} props.message - Mensaje a mostrar
- * @param {string} props.details - Detalles adicionales (opcional)
- * @param {Function} props.onClose - Función para cerrar el mensaje (opcional)
+ * @param {string} props.type - Message type: "error" or "info"
+ * @param {string} props.message - Message to display
+ * @param {string} props.details - Additional details (optional)
+ * @param {Function} props.onClose - Function to close the message (optional)
  */
 const GoogleAuthError = ({ type = "error", message, details, onClose }) => {
   const bgColor = type === "error" ? "bg-red-500/10" : "bg-blue-500/10";

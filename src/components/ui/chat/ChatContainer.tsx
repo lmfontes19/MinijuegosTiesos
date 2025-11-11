@@ -9,17 +9,17 @@ const ChatContainer: React.FC = () => {
   const pathname = usePathname();
   const [isDashboard, setIsDashboard] = useState(false);
   
-  // Detectar si estamos en el dashboard
+  // Detect if we are in the dashboard
   useEffect(() => {
     setIsDashboard(pathname.includes('/dashboard'));
   }, [pathname]);
 
-  // Si el chat está cerrado, no renderizamos nada
+  // If the chat is closed, we don't render anything
   if (!isChatOpen) return null;
 
   return (
     <>
-      {/* Para la vista de dashboard, el CSS lo maneja directamente el componente del dashboard */}
+      {/* For the dashboard view, the CSS is handled directly by the dashboard component */}
       <ChatPanel />
     </>
   );

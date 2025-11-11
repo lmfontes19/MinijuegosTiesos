@@ -6,7 +6,7 @@ import { useGameHighScores } from '@/hooks/useGameHighScores';
 export const MemoramaGame = () => {
   const { updateHighScore, getHighScore } = useGameHighScores();
   const [gameState, setGameState] = useState('menu'); // 'menu', 'playing', 'paused', 'finished'
-  const [difficulty, setDifficulty] = useState(16); // 16, 20, 24, 28, 32 cartas
+  const [difficulty, setDifficulty] = useState(16); // 16, 20, 24, 28, 32 cards
   const [cards, setCards] = useState([]);
   const [flippedCards, setFlippedCards] = useState([]);
   const [matchedCards, setMatchedCards] = useState([]);
@@ -35,13 +35,13 @@ export const MemoramaGame = () => {
     { src: '/memorama/bow.png', alt: 'Bow', name: 'bow', color: '#92400E' }
   ];
 
-  // Inicializar cartas
+  // Initialize cards
   const initializeCards = useCallback(() => {
     const numPairs = difficulty / 2;
     const selectedImages = cardImages.slice(0, numPairs);
     const cardPairs = [...selectedImages, ...selectedImages];
     
-    // Mezclar las cartas
+    // Shuffle the cards
     const shuffledCards = cardPairs
       .map((imageData, index) => ({
         id: index,
@@ -69,13 +69,13 @@ export const MemoramaGame = () => {
     return () => clearInterval(interval);
   }, [isRunning, gameState]);
 
-  // Cargar mejor tiempo del localStorage
+  // Load best time from localStorage
   useEffect(() => {
     const currentBestTime = getHighScore('memorama');
     setBestTime(currentBestTime > 0 ? currentBestTime : null);
   }, [difficulty, getHighScore]);
 
-  // Manejar clic en carta
+  // Handle card click
   const handleCardClick = (cardId) => {
     if (gameState !== 'playing' || flippedCards.length >= 2) return;
     
@@ -85,14 +85,14 @@ export const MemoramaGame = () => {
     const newFlippedCards = [...flippedCards, cardId];
     setFlippedCards(newFlippedCards);
 
-    // Actualizar cartas
+    // Update cards
     setCards(prevCards => 
       prevCards.map(c => 
         c.id === cardId ? { ...c, isFlipped: true } : c
       )
     );
 
-    // Si se voltearon 2 cartas, verificar coincidencia
+    // If 2 cards were flipped, check for a match
     if (newFlippedCards.length === 2) {
       setMoves(moves + 1);
       
@@ -102,7 +102,7 @@ export const MemoramaGame = () => {
         const secondCard = cards.find(c => c.id === secondCardId);
 
         if (firstCard.imageData.name === secondCard.imageData.name) {
-          // Coincidencia encontrada
+          // Match found
           const newMatchedCards = [...matchedCards, firstCardId, secondCardId];
           setMatchedCards(newMatchedCards);
           
@@ -114,12 +114,12 @@ export const MemoramaGame = () => {
             )
           );
 
-          // Verificar si el juego terminó
+          // Check if the game ended
           if (newMatchedCards.length === difficulty) {
             setGameState('finished');
             setIsRunning(false);
             
-            // Actualizar mejor tiempo usando el hook
+            // Update best time using the hook
             const wasNewRecord = updateHighScore('memorama', timer);
             setIsNewRecord(wasNewRecord);
             
@@ -128,7 +128,7 @@ export const MemoramaGame = () => {
             }
           }
         } else {
-          // No hay coincidencia, voltear cartas de vuelta
+          // No match, flip cards back
           setCards(prevCards => 
             prevCards.map(c => 
               newFlippedCards.includes(c.id) 
@@ -143,7 +143,7 @@ export const MemoramaGame = () => {
     }
   };
 
-  // Iniciar juego
+  // Start game
   const startGame = () => {
     initializeCards();
     setGameState('playing');
@@ -151,7 +151,7 @@ export const MemoramaGame = () => {
     setIsNewRecord(false);
   };
 
-  // Pausar/Reanudar juego
+  // Pause/Resume game
   const togglePause = () => {
     if (gameState === 'playing') {
       setGameState('paused');
@@ -162,21 +162,21 @@ export const MemoramaGame = () => {
     }
   };
 
-  // Reiniciar juego
+  // Restart game
   const resetGame = () => {
     setGameState('menu');
     setIsRunning(false);
     initializeCards();
   };
 
-  // Formatear tiempo
+  // Format time
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Calcular dimensiones del grid
+  // Calculate grid dimensions
   const getGridDimensions = () => {
     switch (difficulty) {
       case 16: return 'grid-cols-4';
@@ -197,11 +197,11 @@ export const MemoramaGame = () => {
               <Target className="w-12 h-12 text-[#F59E0B] mx-auto" />
             </div>
             <h1 className="text-3xl font-bold text-white mb-2">Memorama</h1>
-            <p className="text-gray-400">Encuentra todas las parejas de cartas en el menor tiempo posible</p>
+            <p className="text-gray-400">Find all pairs of cards in the shortest time possible</p>
           </div>
 
           <div className="mb-8">
-            <h3 className="text-white font-medium mb-4">Selecciona la dificultad</h3>
+            <h3 className="text-white font-medium mb-4">Select difficulty</h3>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
               {[16, 20, 24, 28, 32].map(num => (
                 <button
@@ -214,7 +214,7 @@ export const MemoramaGame = () => {
                   }`}
                 >
                   <div className="text-lg font-bold">{num}</div>
-                  <div className="text-xs">cartas</div>
+                  <div className="text-xs">cards</div>
                 </button>
               ))}
             </div>
@@ -224,7 +224,7 @@ export const MemoramaGame = () => {
             <div className="mb-6 bg-[#0F172A]/40 rounded-lg p-4 border border-[#334155]">
               <div className="flex items-center justify-center">
                 <Trophy className="w-5 h-5 text-[#F59E0B] mr-2" />
-                <span className="text-white">Mejor tiempo ({difficulty} cartas): </span>
+                <span className="text-white">Best time ({difficulty} cards): </span>
                 <span className="text-[#F59E0B] font-bold ml-1">{formatTime(bestTime)}</span>
               </div>
             </div>
@@ -235,7 +235,7 @@ export const MemoramaGame = () => {
             className="bg-[#F59E0B] hover:bg-[#F59E0B]/90 text-white px-8 py-3 rounded-lg font-medium transition-colors flex items-center mx-auto"
           >
             <Play className="w-5 h-5 mr-2" />
-            Comenzar Juego
+            Start Game
           </button>
         </div>
       </div>
@@ -244,7 +244,7 @@ export const MemoramaGame = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      {/* Header del juego */}
+      {/* Game header */}
       <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-4 mb-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center space-x-6">
@@ -254,11 +254,11 @@ export const MemoramaGame = () => {
             </div>
             <div className="flex items-center">
               <Target className="w-5 h-5 text-[#10B981] mr-2" />
-              <span className="text-white font-medium">{moves} movimientos</span>
+              <span className="text-white font-medium">{moves} moves</span>
             </div>
             <div className="flex items-center">
               <Star className="w-5 h-5 text-[#F59E0B] mr-2" />
-              <span className="text-white font-medium">{matchedCards.length / 2}/{difficulty / 2} parejas</span>
+              <span className="text-white font-medium">{matchedCards.length / 2}/{difficulty / 2} pairs</span>
             </div>
           </div>
           
@@ -279,35 +279,35 @@ export const MemoramaGame = () => {
         </div>
       </div>
 
-      {/* Pantalla de pausa */}
+      {/* Pause screen */}
       {gameState === 'paused' && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
           <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-8 text-center">
             <Pause className="w-16 h-16 text-[#6366F1] mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-white mb-4">Juego Pausado</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">Game Paused</h2>
             <button
               onClick={togglePause}
               className="bg-[#6366F1] hover:bg-[#6366F1]/90 text-white px-6 py-3 rounded-lg font-medium transition-colors"
             >
-              Continuar
+              Continue
             </button>
           </div>
         </div>
       )}
 
-      {/* Pantalla de juego terminado */}
+      {/* Finished game screen */}
       {gameState === 'finished' && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
           <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-8 text-center max-w-md">
             <Trophy className="w-16 h-16 text-[#F59E0B] mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-white mb-4">¡Felicidades!</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">Congratulations!</h2>
             <div className="space-y-2 mb-6">
-              <p className="text-gray-300">Tiempo: <span className="text-[#F59E0B] font-bold">{formatTime(timer)}</span></p>
-              <p className="text-gray-300">Movimientos: <span className="text-[#10B981] font-bold">{moves}</span></p>
+              <p className="text-gray-300">Time: <span className="text-[#F59E0B] font-bold">{formatTime(timer)}</span></p>
+              <p className="text-gray-300">Moves: <span className="text-[#10B981] font-bold">{moves}</span></p>
               {isNewRecord && (
                 <p className="text-[#F59E0B] font-bold flex items-center justify-center">
                   <Star className="w-4 h-4 mr-1" />
-                  ¡Nuevo récord!
+                  New record!
                 </p>
               )}
             </div>
@@ -316,20 +316,20 @@ export const MemoramaGame = () => {
                 onClick={startGame}
                 className="bg-[#F59E0B] hover:bg-[#F59E0B]/90 text-white px-6 py-3 rounded-lg font-medium transition-colors flex-1"
               >
-                Jugar de nuevo
+                Play Again
               </button>
               <button
                 onClick={resetGame}
                 className="bg-[#6366F1] hover:bg-[#6366F1]/90 text-white px-6 py-3 rounded-lg font-medium transition-colors flex-1"
               >
-                Menú
+                Menu
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Grid de cartas */}
+      {/* Card grid */}
       <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-6">
         <div className={`grid ${getGridDimensions()} gap-3 max-w-4xl mx-auto`}>
           {cards.map((card) => (
@@ -349,7 +349,7 @@ export const MemoramaGame = () => {
                     alt={card.imageData.alt}
                     className="w-full h-full object-cover rounded-lg shadow-sm"
                     onError={(e) => {
-                      // Fallback si la imagen no se puede cargar
+                      // Fallback if the image cannot be loaded
                       e.target.style.display = 'none';
                       e.target.nextSibling.style.display = 'flex';
                     }}
@@ -369,7 +369,7 @@ export const MemoramaGame = () => {
                 </div>
               )}
               
-              {/* Efecto de brillo para cartas emparejadas */}
+              {/* Glow effect for matched cards */}
               {card.isMatched && (
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#F59E0B]/20 to-transparent rounded-xl animate-pulse"></div>
               )}

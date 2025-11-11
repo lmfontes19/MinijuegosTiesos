@@ -45,7 +45,7 @@ const DashboardPage = () => {
         });
         
         if (!response.ok) {
-          // Si el token no es válido, redirigir al login
+          // If the token is not valid, redirect to login
           localStorage.removeItem('CTtoken');
           localStorage.removeItem('userId');
           localStorage.removeItem('userProfilePicture');
@@ -53,7 +53,7 @@ const DashboardPage = () => {
           return;
         }
         
-        // Si el token es válido, cargar los datos del usuario
+        // If the token is valid, load user data
         await loadUserData();
       } catch (error) {
         console.error('Authentication error:', error);
@@ -93,7 +93,7 @@ const DashboardPage = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, [router]);
 
-  // Manejar el hash de la URL para cambiar la vista
+  // Handle the URL hash to change the view
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');

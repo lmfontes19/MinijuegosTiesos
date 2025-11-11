@@ -15,7 +15,7 @@ export const FlappyBirdGame = () => {
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [isNewRecord, setIsNewRecord] = useState(false);
-  const [hasStarted, setHasStarted] = useState(true); // Para controlar si ha empezado la física
+  const [hasStarted, setHasStarted] = useState(true); // To control if physics has started
 
   // Game constants
   const CANVAS_WIDTH = 480;
@@ -23,11 +23,11 @@ export const FlappyBirdGame = () => {
   const BIRD_SIZE = 30;
   const PIPE_WIDTH = 60;
   const PIPE_GAP = 220;
-  const GRAVITY = 0.4; // Incrementado para mejor jugabilidad
-  const JUMP_STRENGTH = -9; // Incrementado para mejor balance
-  const INITIAL_PIPE_SPEED = 3; // Velocidad original
+  const GRAVITY = 0.4; // Increased for better gameplay
+  const JUMP_STRENGTH = -9; // Increased for better balance
+  const INITIAL_PIPE_SPEED = 3; // Original speed
   const SPEED_INCREASE = 0.5;
-  const PIPES_PER_LEVEL = 5; // Corregido a 5
+  const PIPES_PER_LEVEL = 5; // Fixed to 5
 
   // Game refs
   const birdRef = useRef({
@@ -89,7 +89,7 @@ export const FlappyBirdGame = () => {
 
   const jump = () => {
     if (gameState === 'playing') {
-      // Si es el primer click, iniciar la física del juego
+      // If it's the first click, start the game physics
       if (!hasStarted) {
         setHasStarted(true);
       }
@@ -119,7 +119,7 @@ export const FlappyBirdGame = () => {
     currentSpeedRef.current = INITIAL_PIPE_SPEED;
     setScore(0);
     setIsNewRecord(false);
-    setHasStarted(true); // Resetear el estado para esperar el primer click
+    setHasStarted(true); // Reset the state to wait for the first click
   };
 
   const startGame = () => {
@@ -150,7 +150,7 @@ export const FlappyBirdGame = () => {
 
     frameRef.current++;
 
-    // Solo aplicar física si ya ha empezado (después del primer click)
+    // Only apply physics if it has already started (after the first click)
     if (hasStarted) {
       // Update bird physics
       const bird = birdRef.current;
@@ -190,15 +190,15 @@ export const FlappyBirdGame = () => {
         }
       });
 
-      // Generate new pipes - primera tubería aparece después de 180 frames (~3 segundos)
-      // Después aparecen cada 150 frames
+      // Generate new pipes - first pipe appears after 180 frames (~3 seconds)
+      // Then they appear every 150 frames
       const pipeSpawnInterval = pipesRef.current.length === 0 ? 180 : 150;
       if (frameRef.current % pipeSpawnInterval === 0) {
         pipesRef.current.push(generatePipes());
       }
     }
 
-    // Siempre dibujar, independientemente de si ha empezado
+    // Always draw, regardless of whether it has started
     draw(ctx);
 
     if (gameState === 'playing') {
@@ -285,7 +285,7 @@ export const FlappyBirdGame = () => {
     ctx.fillStyle = '#228B22';
     ctx.fillRect(0, CANVAS_HEIGHT - 55, CANVAS_WIDTH, 10);
 
-    // Si no ha empezado, mostrar mensaje de "haz click para empezar"
+    // If it hasn't started, show "click to start" message
     if (!hasStarted) {
       ctx.fillStyle = 'rgba(255, 215, 0, 0.9)'; // Semi-transparent gold
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
@@ -294,14 +294,14 @@ export const FlappyBirdGame = () => {
       ctx.textAlign = 'center';
       
       // Draw text with stroke for better visibility
-      ctx.strokeText('🐦 Haz click para empezar 🐦', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 10);
-      ctx.fillText('🐦 Haz click para empezar 🐦', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 10);
+      ctx.strokeText('Click to start', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 10);
+      ctx.fillText('Click to start', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 10);
       
       ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
       ctx.font = '14px Arial';
-      ctx.strokeText('Presiona ESPACIO o haz click', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 15);
-      ctx.fillText('Presiona ESPACIO o haz click', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 15);
+      ctx.strokeText('Press SPACE or click', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 15);
+      ctx.fillText('Press SPACE or click', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 15);
     }
   };
 
@@ -324,7 +324,7 @@ export const FlappyBirdGame = () => {
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Flappy Bird</h1>
             <p className="text-gray-400 text-sm md:text-base">
-              ¡Ayuda al pajarito a volar entre las tuberías sin chocar!
+              Help the little bird fly between the pipes without crashing!
             </p>
           </div>
 
@@ -332,8 +332,8 @@ export const FlappyBirdGame = () => {
             <div className="mb-6 bg-[#0F172A]/40 rounded-lg p-3 md:p-4 border border-[#334155]">
               <div className="flex items-center justify-center">
                 <Trophy className="w-4 h-4 md:w-5 md:h-5 text-[#FFD700] mr-2" />
-                <span className="text-white text-sm md:text-base">Mejor puntuación: </span>
-                <span className="text-[#FFD700] font-bold ml-1 text-sm md:text-base">{highScore} puntos</span>
+                <span className="text-white text-sm md:text-base">Best score: </span>
+                <span className="text-[#FFD700] font-bold ml-1 text-sm md:text-base">{highScore} points</span>
               </div>
             </div>
           )}
@@ -344,23 +344,23 @@ export const FlappyBirdGame = () => {
                 <Space className="w-4 h-4 md:w-5 md:h-5 text-[#6366F1]" />
                 <span className="text-[#6366F1] text-xs md:text-sm">CLICK</span>
               </div>
-              <div className="text-white font-medium text-sm">Controles</div>
+              <div className="text-white font-medium text-sm">Controls</div>
               <div className="text-gray-400 text-xs md:text-sm">
-                <span className="text-[#FFD700]">1.</span> Click para empezar<br/>
-                <span className="text-[#FFD700]">2.</span> Espaciadora/Click para saltar
+                <span className="text-[#FFD700]">1.</span> Click to start<br/>
+                <span className="text-[#FFD700]">2.</span> Spacebar/Click to jump
               </div>
             </div>
             <div className="bg-[#0F172A]/40 rounded-lg p-3 md:p-4 border border-[#334155]">
               <Target className="w-4 h-4 md:w-5 md:h-5 text-[#10B981] mx-auto mb-3" />
-              <div className="text-white font-medium text-sm">Objetivo</div>
-              <div className="text-gray-400 text-xs md:text-sm">Pasa entre las tuberías 🟢</div>
+              <div className="text-white font-medium text-sm">Objective</div>
+              <div className="text-gray-400 text-xs md:text-sm">Pass between the pipes</div>
             </div>
           </div>
 
           <div className="bg-[#0F172A]/40 rounded-lg p-3 md:p-4 border border-[#334155] mb-6 md:mb-8">
-            <h3 className="text-white font-medium mb-2 text-sm md:text-base">🚀 Sistema de Velocidad</h3>
+            <h3 className="text-white font-medium mb-2 text-sm md:text-base">Speed System</h3>
             <p className="text-gray-400 text-xs md:text-sm">
-              El juego se acelera cada <span className="text-[#FFD700]">{PIPES_PER_LEVEL} tuberías</span> superadas
+              The game speeds up every <span className="text-[#FFD700]">{PIPES_PER_LEVEL} pipes</span> passed
             </p>
           </div>
 
@@ -369,7 +369,7 @@ export const FlappyBirdGame = () => {
             className="bg-[#FFD700] hover:bg-[#FFD700]/90 text-black px-6 md:px-8 py-2 md:py-3 rounded-lg font-medium transition-colors flex items-center mx-auto text-sm md:text-base"
           >
             <Play className="w-4 h-4 md:w-5 md:h-5 mr-2" />
-            Comenzar Juego
+            Start Game
           </button>
         </div>
       </div>
@@ -383,11 +383,11 @@ export const FlappyBirdGame = () => {
           <div className="flex items-center space-x-3 md:space-x-6">
             <div className="flex items-center">
               <Gamepad2 className="w-4 h-4 md:w-5 md:h-5 text-[#FFD700] mr-2" />
-              <span className="text-white font-medium text-sm md:text-base">Puntuación: {score}</span>
+              <span className="text-white font-medium text-sm md:text-base">Score: {score}</span>
             </div>
             <div className="flex items-center">
               <Trophy className="w-4 h-4 md:w-5 md:h-5 text-[#F59E0B] mr-2" />
-              <span className="text-white font-medium text-sm md:text-base">Récord: {highScore}</span>
+              <span className="text-white font-medium text-sm md:text-base">Record: {highScore}</span>
             </div>
           </div>
 
@@ -406,18 +406,18 @@ export const FlappyBirdGame = () => {
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
           <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-6 md:p-8 text-center max-w-md w-full">
             <Skull className="w-12 h-12 md:w-16 md:h-16 text-[#EF4444] mx-auto mb-4" />
-            <h2 className="text-xl md:text-2xl font-bold text-white mb-4">💥 ¡Chocaste!</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-white mb-4">You Crashed!</h2>
             <div className="space-y-2 mb-6">
               <p className="text-gray-300 text-sm md:text-base">
-                Puntuación final: <span className="text-[#FFD700] font-bold">{score}</span>
+                Final score: <span className="text-[#FFD700] font-bold">{score}</span>
               </p>
               <p className="text-gray-400 text-xs md:text-sm">
-                Nivel alcanzado: {Math.floor(score / PIPES_PER_LEVEL) + 1}
+                Level reached: {Math.floor(score / PIPES_PER_LEVEL) + 1}
               </p>
               {isNewRecord && (
                 <p className="text-[#FFD700] font-bold flex items-center justify-center text-sm md:text-base">
                   <Star className="w-4 h-4 mr-1" />
-                  ¡Nuevo récord!
+                  New record!
                 </p>
               )}
             </div>
@@ -426,17 +426,17 @@ export const FlappyBirdGame = () => {
                 onClick={startGame}
                 className="bg-[#FFD700] hover:bg-[#FFD700]/90 text-black px-4 md:px-6 py-2 md:py-3 rounded-lg font-medium transition-colors flex-1 text-sm md:text-base"
               >
-                Jugar de nuevo
+                Play Again
               </button>
               <button
                 onClick={backToMenu}
                 className="bg-[#6366F1] hover:bg-[#6366F1]/90 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-medium transition-colors flex-1 text-sm md:text-base"
               >
-                Menú
+                Menu
               </button>
             </div>
             <p className="text-gray-400 text-xs md:text-sm mt-4">
-              O presiona <kbd className="bg-[#334155] px-2 py-1 rounded text-white">R</kbd> para reiniciar
+              Or press <kbd className="bg-[#334155] px-2 py-1 rounded text-white">R</kbd> to restart
             </p>
           </div>
         </div>
@@ -444,21 +444,21 @@ export const FlappyBirdGame = () => {
 
       <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-3 md:p-6">
         <div className="text-center mb-4">
-          <h3 className="text-lg md:text-xl font-bold text-white mb-2">🐦 ¡Vuela entre las tuberías!</h3>
+          <h3 className="text-lg md:text-xl font-bold text-white mb-2">Fly between the pipes!</h3>
           <p className="text-gray-400 text-xs md:text-sm">
-            Presiona <kbd className="bg-[#334155] px-1 md:px-2 py-1 rounded text-white mx-1">Espacio</kbd> 
-            o <span className="text-[#6366F1] font-medium">haz click</span> para saltar
+            Press <kbd className="bg-[#334155] px-1 md:px-2 py-1 rounded text-white mx-1">Space</kbd> 
+            or <span className="text-[#6366F1] font-medium">click</span> to jump
           </p>
         </div>
 
         <div className="text-center mb-4">
           <div className="inline-block bg-[#0F172A]/40 rounded-lg px-4 md:px-6 py-2 md:py-3 border border-[#334155]">
             <span className="text-white font-bold text-sm md:text-lg">
-              Puntuación: <span className="text-[#FFD700]">{score}</span>
+              Score: <span className="text-[#FFD700]">{score}</span>
             </span>
             {score > 0 && (
               <span className="ml-4 text-xs md:text-sm text-gray-400">
-                Velocidad: {Math.floor(score / PIPES_PER_LEVEL) + 1}
+                Speed: {Math.floor(score / PIPES_PER_LEVEL) + 1}
               </span>
             )}
           </div>

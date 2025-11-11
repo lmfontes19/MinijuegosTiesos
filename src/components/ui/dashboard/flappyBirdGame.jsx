@@ -15,6 +15,7 @@ export const FlappyBirdGame = () => {
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [isNewRecord, setIsNewRecord] = useState(false);
+  const [hasStarted, setHasStarted] = useState(true); // Para controlar si ha empezado la física
 
   // Game constants
   const CANVAS_WIDTH = 480;
@@ -22,11 +23,11 @@ export const FlappyBirdGame = () => {
   const BIRD_SIZE = 30;
   const PIPE_WIDTH = 60;
   const PIPE_GAP = 220;
-  const GRAVITY = 0.25;
-  const JUMP_STRENGTH = -7;
-  const INITIAL_PIPE_SPEED = 2;
-  const SPEED_INCREASE = 0.3;
-  const PIPES_PER_LEVEL = 1;
+  const GRAVITY = 0.4; // Incrementado para mejor jugabilidad
+  const JUMP_STRENGTH = -9; // Incrementado para mejor balance
+  const INITIAL_PIPE_SPEED = 3; // Velocidad original
+  const SPEED_INCREASE = 0.5;
+  const PIPES_PER_LEVEL = 5; // Corregido a 5
 
   // Game refs
   const birdRef = useRef({
@@ -88,6 +89,10 @@ export const FlappyBirdGame = () => {
 
   const jump = () => {
     if (gameState === 'playing') {
+      // Si es el primer click, iniciar la física del juego
+      if (!hasStarted) {
+        setHasStarted(true);
+      }
       birdRef.current.velocity = JUMP_STRENGTH;
     }
   };
@@ -114,12 +119,12 @@ export const FlappyBirdGame = () => {
     currentSpeedRef.current = INITIAL_PIPE_SPEED;
     setScore(0);
     setIsNewRecord(false);
+    setHasStarted(true); // Resetear el estado para esperar el primer click
   };
 
   const startGame = () => {
     resetGame();
     setGameState('playing');
-    // No generar tuberías inmediatamente, esperar un poco más
   };
 
   const endGame = () => {
@@ -145,52 +150,55 @@ export const FlappyBirdGame = () => {
 
     frameRef.current++;
 
-    // Update bird physics
-    const bird = birdRef.current;
-    bird.velocity += GRAVITY;
-    bird.y += bird.velocity;
-    bird.rotation = Math.min(bird.velocity * 3, 90);
+    // Solo aplicar física si ya ha empezado (después del primer click)
+    if (hasStarted) {
+      // Update bird physics
+      const bird = birdRef.current;
+      bird.velocity += GRAVITY;
+      bird.y += bird.velocity;
+      bird.rotation = Math.min(bird.velocity * 3, 90);
 
-    // Check ground and ceiling collision
-    if (bird.y + BIRD_SIZE > CANVAS_HEIGHT - 50 || bird.y < 0) {
-      endGame();
-      return;
-    }
-
-    // Calculate current speed based on score
-    currentSpeedRef.current = INITIAL_PIPE_SPEED + Math.floor(score / PIPES_PER_LEVEL) * SPEED_INCREASE;
-
-    // Update pipes with dynamic speed
-    pipesRef.current = pipesRef.current.filter(pipe => pipe.x + PIPE_WIDTH > 0);
-    
-    pipesRef.current.forEach(pipe => {
-      pipe.x -= currentSpeedRef.current;
-
-      // Check if bird passed the pipe
-      if (!pipe.passed && pipe.x + PIPE_WIDTH < bird.x) {
-        pipe.passed = true;
-        setScore(prev => prev + 1);
-      }
-
-      // Check collision with pipes
-      if (
-        bird.x + BIRD_SIZE > pipe.x &&
-        bird.x < pipe.x + PIPE_WIDTH &&
-        (bird.y < pipe.topHeight || bird.y + BIRD_SIZE > pipe.bottomY)
-      ) {
+      // Check ground and ceiling collision
+      if (bird.y + BIRD_SIZE > CANVAS_HEIGHT - 50 || bird.y < 0) {
         endGame();
         return;
       }
-    });
 
-    // Generate new pipes - primera tubería aparece después de 180 frames (~3 segundos)
-    // Después aparecen cada 150 frames
-    const pipeSpawnInterval = pipesRef.current.length === 0 ? 180 : 150;
-    if (frameRef.current % pipeSpawnInterval === 0) {
-      pipesRef.current.push(generatePipes());
+      // Calculate current speed based on score
+      currentSpeedRef.current = INITIAL_PIPE_SPEED + Math.floor(score / PIPES_PER_LEVEL) * SPEED_INCREASE;
+
+      // Update pipes with dynamic speed
+      pipesRef.current = pipesRef.current.filter(pipe => pipe.x + PIPE_WIDTH > 0);
+      
+      pipesRef.current.forEach(pipe => {
+        pipe.x -= currentSpeedRef.current;
+
+        // Check if bird passed the pipe
+        if (!pipe.passed && pipe.x + PIPE_WIDTH < birdRef.current.x) {
+          pipe.passed = true;
+          setScore(prev => prev + 1);
+        }
+
+        // Check collision with pipes
+        if (
+          birdRef.current.x + BIRD_SIZE > pipe.x &&
+          birdRef.current.x < pipe.x + PIPE_WIDTH &&
+          (birdRef.current.y < pipe.topHeight || birdRef.current.y + BIRD_SIZE > pipe.bottomY)
+        ) {
+          endGame();
+          return;
+        }
+      });
+
+      // Generate new pipes - primera tubería aparece después de 180 frames (~3 segundos)
+      // Después aparecen cada 150 frames
+      const pipeSpawnInterval = pipesRef.current.length === 0 ? 180 : 150;
+      if (frameRef.current % pipeSpawnInterval === 0) {
+        pipesRef.current.push(generatePipes());
+      }
     }
 
-    // Draw everything
+    // Siempre dibujar, independientemente de si ha empezado
     draw(ctx);
 
     if (gameState === 'playing') {
@@ -276,6 +284,25 @@ export const FlappyBirdGame = () => {
     ctx.fillRect(0, CANVAS_HEIGHT - 50, CANVAS_WIDTH, 50);
     ctx.fillStyle = '#228B22';
     ctx.fillRect(0, CANVAS_HEIGHT - 55, CANVAS_WIDTH, 10);
+
+    // Si no ha empezado, mostrar mensaje de "haz click para empezar"
+    if (!hasStarted) {
+      ctx.fillStyle = 'rgba(255, 215, 0, 0.9)'; // Semi-transparent gold
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+      ctx.lineWidth = 2;
+      ctx.font = 'bold 22px Arial';
+      ctx.textAlign = 'center';
+      
+      // Draw text with stroke for better visibility
+      ctx.strokeText('🐦 Haz click para empezar 🐦', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 10);
+      ctx.fillText('🐦 Haz click para empezar 🐦', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 10);
+      
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.font = '14px Arial';
+      ctx.strokeText('Presiona ESPACIO o haz click', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 15);
+      ctx.fillText('Presiona ESPACIO o haz click', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 15);
+    }
   };
 
   const drawCloud = (ctx, x, y) => {
@@ -318,7 +345,10 @@ export const FlappyBirdGame = () => {
                 <span className="text-[#6366F1] text-xs md:text-sm">CLICK</span>
               </div>
               <div className="text-white font-medium text-sm">Controles</div>
-              <div className="text-gray-400 text-xs md:text-sm">Espaciadora o Click para saltar</div>
+              <div className="text-gray-400 text-xs md:text-sm">
+                <span className="text-[#FFD700]">1.</span> Click para empezar<br/>
+                <span className="text-[#FFD700]">2.</span> Espaciadora/Click para saltar
+              </div>
             </div>
             <div className="bg-[#0F172A]/40 rounded-lg p-3 md:p-4 border border-[#334155]">
               <Target className="w-4 h-4 md:w-5 md:h-5 text-[#10B981] mx-auto mb-3" />

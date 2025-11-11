@@ -10,6 +10,7 @@ import { MemoramaGame } from '@/components/ui/dashboard/memoramaGame';
 import { CoinClickGame } from '@/components/ui/dashboard/coinClickerGame';
 import { SnakeGame } from '@/components/ui/dashboard/snakeGame';
 import { FlappyBirdGame } from '@/components/ui/dashboard/flappyBirdGame';
+import { SpacingLayerGame } from '@/components/ui/dashboard/spacingLayerGame';
 import { useChat } from '@/contexts/ChatContext';
 import { useGameHighScores } from '@/hooks/useGameHighScores';
 
@@ -97,7 +98,7 @@ const DashboardPage = () => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
       const validViews = [
-        'dashboard', 'settings', 'memorama', 'coinclick', 'snakegame', 'flappybird'
+        'dashboard', 'settings', 'memorama', 'coinclick', 'snakegame', 'flappybird', 'spacinglayer'
       ];
       
       if (hash && validViews.includes(hash)) {
@@ -134,6 +135,7 @@ const DashboardPage = () => {
       case 'coinclick': return <CoinClickGame />;
       case 'snakegame': return <SnakeGame />;
       case 'flappybird': return <FlappyBirdGame />;
+      case 'spacinglayer': return <SpacingLayerGame />;
       default: return <DashboardContent highScores={highScores} />;
     }
   };
@@ -145,6 +147,7 @@ const DashboardPage = () => {
     { id: 'coinclick', label: 'CoinClick', icon: Gamepad2 },
     { id: 'snakegame', label: 'Snake Game', icon: Gamepad2 },
     { id: 'flappybird', label: 'Flappy Bird', icon: Gamepad2 },
+    { id: 'spacinglayer', label: 'Spacing Layer', icon: Gamepad2 },
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
 

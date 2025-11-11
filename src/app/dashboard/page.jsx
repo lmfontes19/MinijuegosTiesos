@@ -9,6 +9,7 @@ import { DashboardContent } from '@/components/ui/dashboard/dashboardContent';
 import { SettingsContent } from '@/components/ui/dashboard/settingsContent';
 import { MemoramaGame } from '@/components/ui/dashboard/memoramaGame';
 import { CoinClickerGame } from '@/components/ui/dashboard/coinClickerGame';
+import { SnakeGame } from '@/components/ui/dashboard/snakeGame';
 import { useChat } from '@/contexts/ChatContext';
 
 // Función que simula una llamada a backend para obtener el balance
@@ -144,7 +145,7 @@ const DashboardPage = () => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
       const validViews = [
-        'dashboard', 'settings', 'memorama', 'coinclicker'
+        'dashboard', 'settings', 'memorama', 'coinclicker', 'snakegame'
       ];
       
       if (hash && validViews.includes(hash)) {
@@ -188,6 +189,7 @@ const DashboardPage = () => {
       case 'settings': return <SettingsContent />;
       case 'memorama': return <MemoramaGame />;
       case 'coinclicker': return <CoinClickerGame />;
+      case 'snakegame': return <SnakeGame />;
       default: return <DashboardContent />;
     }
   };
@@ -197,6 +199,7 @@ const DashboardPage = () => {
     { id: 'dashboard', label: 'Dashboard', icon: LayoutGrid },
     { id: 'memorama', label: 'Memorama', icon: Gamepad2 },
     { id: 'coinclicker', label: 'Coin Collector', icon: Coins },
+    { id: 'snakegame', label: 'Snake Game', icon: Gamepad2 },
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
 

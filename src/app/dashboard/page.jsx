@@ -2,67 +2,28 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
-  LayoutGrid, Zap, Coins, Megaphone, Trophy, Wallet, Settings,
-  Menu, X, Download, Upload, User, Bell, BarChart, Loader, Users, Gamepad2
+  LayoutGrid, Settings, Menu, X, Loader, Gamepad2, Trophy
 } from 'lucide-react';
 import { DashboardContent } from '@/components/ui/dashboard/dashboardContent';
 import { SettingsContent } from '@/components/ui/dashboard/settingsContent';
 import { MemoramaGame } from '@/components/ui/dashboard/memoramaGame';
 import { CoinClickGame } from '@/components/ui/dashboard/coinClickerGame';
 import { SnakeGame } from '@/components/ui/dashboard/snakeGame';
+import { FlappyBirdGame } from '@/components/ui/dashboard/flappyBirdGame';
 import { useChat } from '@/contexts/ChatContext';
-
-// Función que simula una llamada a backend para obtener el balance
-const fetchBalance = async () => {
-  try {
-    const CTtoken = localStorage.getItem('CTtoken');
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/dashboard/balance`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${CTtoken}`,
-      },
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch balance');
-    }
-    
-    const data = await response.json();
-    return {
-      balanceUSD: data.balance || 0,
-    };
-  } catch (error) {
-    console.error('Error fetching balance:', error);
-    return {
-      balanceUSD: 0,
-    };
-  }
-};
-
-const fetchNotifications = async () => {
-  // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 800));
-  return [
-    { id: 1, text: "New task available in your region", time: "10 minutes ago", isRead: false },
-    { id: 2, text: "Your withdrawal of $25.50 was processed", time: "2 hours ago", isRead: true },
-    { id: 3, text: "Complete your profile to unlock premium tasks", time: "1 day ago", isRead: false }
-  ];
-};
+import { useGameHighScores } from '@/hooks/useGameHighScores';
 
 const DashboardPage = () => {
   const router = useRouter();
   const [currentView, setCurrentView] = useState('dashboard');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [notifications, setNotifications] = useState([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [balance, setBalance] = useState({ balanceUSD: 0 });
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState({
     fullName: '',
     profilePicture: null
   });
   const { isChatOpen } = useChat();
+  const { highScores } = useGameHighScores();
   
   useEffect(() => {
     const checkAuth = async () => {
@@ -91,8 +52,8 @@ const DashboardPage = () => {
           return;
         }
         
-        // Si el token es válido, cargar los datos del dashboard
-        await loadDashboardData();
+        // Si el token es válido, cargar los datos del usuario
+        await loadUserData();
       } catch (error) {
         console.error('Authentication error:', error);
         localStorage.removeItem('CTtoken');
@@ -100,18 +61,9 @@ const DashboardPage = () => {
       }
     };
 
-    const loadDashboardData = async () => {
+    const loadUserData = async () => {
       setIsLoading(true);
       try {
-        // Load data in parallel for better performance
-        const [balanceData, notificationsData] = await Promise.all([
-          fetchBalance(),
-          fetchNotifications()
-        ]);
-        
-        setBalance(balanceData);
-        setNotifications(notificationsData);
-        
         // Get profile picture if available
         const savedProfilePicture = localStorage.getItem('userProfilePicture');
         if (savedProfilePicture) {
@@ -121,7 +73,7 @@ const DashboardPage = () => {
           }));
         }
       } catch (error) {
-        console.error('Error loading dashboard data:', error);
+        console.error('Error loading user data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -145,7 +97,7 @@ const DashboardPage = () => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
       const validViews = [
-        'dashboard', 'settings', 'memorama', 'coinclick', 'snakegame'
+        'dashboard', 'settings', 'memorama', 'coinclick', 'snakegame', 'flappybird'
       ];
       
       if (hash && validViews.includes(hash)) {
@@ -174,15 +126,6 @@ const DashboardPage = () => {
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  
-  const toggleNotifications = (e) => {
-    e.stopPropagation();
-    setIsNotificationsOpen(!isNotificationsOpen);
-  };
-  
-  const markAllNotificationsAsRead = () => {
-    setNotifications(notifications.map(n => ({ ...n, isRead: true })));
-  };
 
   const renderContent = () => {
     switch (currentView) {
@@ -190,7 +133,8 @@ const DashboardPage = () => {
       case 'memorama': return <MemoramaGame />;
       case 'coinclick': return <CoinClickGame />;
       case 'snakegame': return <SnakeGame />;
-      default: return <DashboardContent />;
+      case 'flappybird': return <FlappyBirdGame />;
+      default: return <DashboardContent highScores={highScores} />;
     }
   };
 
@@ -198,8 +142,9 @@ const DashboardPage = () => {
   const navLinks = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutGrid },
     { id: 'memorama', label: 'Memorama', icon: Gamepad2 },
-    { id: 'coinclick', label: 'CoinClick', icon: Coins },
+    { id: 'coinclick', label: 'CoinClick', icon: Gamepad2 },
     { id: 'snakegame', label: 'Snake Game', icon: Gamepad2 },
+    { id: 'flappybird', label: 'Flappy Bird', icon: Gamepad2 },
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
 
@@ -210,17 +155,18 @@ const DashboardPage = () => {
     window.location.hash = viewId === 'dashboard' ? '' : viewId;
   };
 
-  // Click outside notifications handler
+  // Click outside handler
   useEffect(() => {
-    const handleClickOutside = () => {
-      if (isNotificationsOpen) {
-        setIsNotificationsOpen(false);
+    // Cleanup mobile menu when resizing
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsMenuOpen(false);
       }
     };
     
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, [isNotificationsOpen]);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Loading state
   if (isLoading) {
@@ -233,8 +179,6 @@ const DashboardPage = () => {
       </div>
     );
   }
-
-  const unreadNotificationsCount = notifications.filter(n => !n.isRead).length;
 
   return (
     <div className="bg-[#0F172A] min-h-screen text-gray-200 flex flex-col relative">
@@ -260,15 +204,8 @@ const DashboardPage = () => {
             ))}
           </div>
           
-          {/* Balance card */}
-          <div className="mt-4 p-4 bg-[#1E293B] rounded-lg mb-4">
-            <div className="flex items-center">
-              <Wallet className="text-[#6366F1] mr-2" size={20} />
-              <span className="font-bold">
-                Balance: ${balance.balanceUSD?.toFixed(2)}
-              </span>
-            </div>
-          </div>
+          {/* High Scores card */}
+          
         </div>
       </aside>
 

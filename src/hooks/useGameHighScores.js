@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 
 export const useGameHighScores = () => {
   const [highScores, setHighScores] = useState({
-    coinClicker: 0,
+    coinClick: 0,
     flappyBird: 0,
     memorama: 0,
     snake: 0,
@@ -15,7 +15,7 @@ export const useGameHighScores = () => {
   useEffect(() => {
     const loadHighScores = () => {
       const scores = {
-        coinClicker: parseInt(localStorage.getItem('coinClicker_highScore')) || 0,
+        coinClick: parseInt(localStorage.getItem('coinClick_highScore')) || 0,
         flappyBird: parseInt(localStorage.getItem('flappyBird_highScore')) || 0,
         memorama: parseInt(localStorage.getItem('memorama_highScore')) || 0,
         snake: parseInt(localStorage.getItem('snake_highScore')) || 0,
@@ -90,7 +90,7 @@ export const useGameHighScores = () => {
       localStorage.removeItem(`${game}_highScore`);
     });
     setHighScores({
-      coinClicker: 0,
+      coinClick: 0,
       flappyBird: 0,
       memorama: 0,
       snake: 0,

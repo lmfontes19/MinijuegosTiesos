@@ -186,9 +186,9 @@ export const DashboardContent = () => {
                 </div>
                 <Star className="w-4 h-4 text-yellow-400" />
               </div>
-              <h4 className="text-white font-medium text-sm mb-1">Coin Collector</h4>
-              <p className="text-2xl font-bold text-[#6366F1]">{highScores.coinClicker.toLocaleString()}</p>
-              <p className="text-xs text-gray-400 mt-1">Coins</p>
+              <h4 className="text-white font-medium text-sm mb-1">CoinClick</h4>
+              <p className="text-2xl font-bold text-[#6366F1]">{highScores.coinClick.toLocaleString()}</p>
+              <p className="text-xs text-gray-400 mt-1">Points</p>
             </div>
 
             <div className="bg-gradient-to-br from-[#0F172A] to-[#1E293B] rounded-lg p-4 border border-[#334155] group hover:shadow-lg transition-all duration-300">

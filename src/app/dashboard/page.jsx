@@ -2,8 +2,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
-  LayoutGrid, Settings, Menu, X, Loader, Gamepad2, Trophy
+  LayoutGrid, Settings, Menu, X, Loader, Gamepad2
 } from 'lucide-react';
+
 import { DashboardContent } from '@/components/ui/dashboard/dashboardContent';
 import { SettingsContent } from '@/components/ui/dashboard/settingsContent';
 import { MemoramaGame } from '@/components/ui/dashboard/memoramaGame';
@@ -11,6 +12,7 @@ import { CoinClickGame } from '@/components/ui/dashboard/coinClickerGame';
 import { SnakeGame } from '@/components/ui/dashboard/snakeGame';
 import { FlappyBirdGame } from '@/components/ui/dashboard/flappyBirdGame';
 import { SpacingLayerGame } from '@/components/ui/dashboard/spacingLayerGame';
+
 import { useChat } from '@/contexts/ChatContext';
 import { useGameHighScores } from '@/hooks/useGameHighScores';
 
@@ -23,9 +25,26 @@ const DashboardPage = () => {
     fullName: '',
     profilePicture: null
   });
+
   const { isChatOpen } = useChat();
   const { highScores } = useGameHighScores();
-  
+
+  // --- SLIDER DE ANUNCIOS --- //
+  const imagesAd1 = ["/ads/ad1-1.jpg", "/ads/ad1-2.jpg"];
+  const imagesAd2 = ["/ads/ad2-1.jpg", "/ads/ad2-2.jpg"];
+
+  const [ad1Index, setAd1Index] = useState(0);
+  const [ad2Index, setAd2Index] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAd1Index(prev => (prev + 1) % imagesAd1.length);
+      setAd2Index(prev => (prev + 1) % imagesAd2.length);
+    }, 5000); // cambia cada 5 segundos
+
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem('CTtoken');
@@ -35,7 +54,6 @@ const DashboardPage = () => {
       }
       
       try {
-        // Verificar el token con el backend
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/navbar/verify-token`, {
           method: 'POST',
           headers: {
@@ -45,7 +63,6 @@ const DashboardPage = () => {
         });
         
         if (!response.ok) {
-          // If the token is not valid, redirect to login
           localStorage.removeItem('CTtoken');
           localStorage.removeItem('userId');
           localStorage.removeItem('userProfilePicture');
@@ -53,7 +70,6 @@ const DashboardPage = () => {
           return;
         }
         
-        // If the token is valid, load user data
         await loadUserData();
       } catch (error) {
         console.error('Authentication error:', error);
@@ -65,7 +81,6 @@ const DashboardPage = () => {
     const loadUserData = async () => {
       setIsLoading(true);
       try {
-        // Get profile picture if available
         const savedProfilePicture = localStorage.getItem('userProfilePicture');
         if (savedProfilePicture) {
           setUserData(prev => ({
@@ -82,7 +97,6 @@ const DashboardPage = () => {
 
     checkAuth();
     
-    // Cleanup mobile menu when resizing
     const handleResize = () => {
       if (window.innerWidth >= 768) {
         setIsMenuOpen(false);
@@ -93,7 +107,6 @@ const DashboardPage = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, [router]);
 
-  // Handle the URL hash to change the view
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
@@ -108,15 +121,10 @@ const DashboardPage = () => {
       }
     };
 
-    // Verificar el hash al cargar inicialmente
     handleHashChange();
-
-    // Escuchar los cambios de hash
     window.addEventListener('hashchange', handleHashChange);
     
-    return () => {
-      window.removeEventListener('hashchange', handleHashChange);
-    };
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
   const handleLogout = () => {
@@ -140,7 +148,6 @@ const DashboardPage = () => {
     }
   };
 
-  // Navigation links
   const navLinks = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutGrid },
     { id: 'memorama', label: 'Memorama', icon: Gamepad2 },
@@ -151,27 +158,12 @@ const DashboardPage = () => {
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
 
-  // Actualizar el hash de la URL al cambiar de vista
   const handleViewChange = (viewId) => {
     setCurrentView(viewId);
     setIsMenuOpen(false);
     window.location.hash = viewId === 'dashboard' ? '' : viewId;
   };
 
-  // Click outside handler
-  useEffect(() => {
-    // Cleanup mobile menu when resizing
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsMenuOpen(false);
-      }
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Loading state
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#0F172A] flex items-center justify-center">
@@ -185,10 +177,12 @@ const DashboardPage = () => {
 
   return (
     <div className="bg-[#0F172A] min-h-screen text-gray-200 flex flex-col relative">
-      {/* Sidebar */}
+      
+      {/* SIDEBAR */}
       <aside className={`fixed top-16 bottom-0 left-0 z-20 w-64 bg-[#0F172A] md:bg-[#0F172A]/80 md:backdrop-blur-md border-r border-[#1E293B] transform ${
         isMenuOpen ? 'translate-x-0' : '-translate-x-full'
       } md:translate-x-0 transition-transform duration-300 ease-in-out overflow-y-auto`}>
+        
         <div className="p-4 h-full flex flex-col">
           <div className="flex-1 space-y-1">
             {navLinks.map(link => (
@@ -206,20 +200,52 @@ const DashboardPage = () => {
               </button>
             ))}
           </div>
-          
-          {/* High Scores card */}
-          
         </div>
       </aside>
 
-      {/* Main content */}
+      {/* MAIN CONTENT + ANUNCIOS */}
       <main className="pt-16 md:pl-64 transition-all duration-300 flex-1 relative z-0 min-h-screen pb-16">
-        <div 
-          className={`p-4 md:p-6 max-w-7xl mx-auto chat-open-adjustment ${
-            isChatOpen ? 'transform -translate-x-[225px]' : ''
-          }`}
-        >
-          {renderContent()}
+        
+        <div className="flex gap-6">
+
+          {/* CONTENIDO PRINCIPAL */}
+          <div 
+            className={`flex-1 p-4 md:p-6 max-w-7xl mx-auto chat-open-adjustment ${
+              isChatOpen ? 'transform -translate-x-[225px]' : ''
+            }`}
+          >
+            {renderContent()}
+          </div>
+
+          {/* 🟣 COLUMNA DERECHA DE ANUNCIOS (SLIDER) */}
+          <aside className="hidden xl:block w-[260px] bg-[#1E293B]/60 border border-white/10 p-4 rounded-lg shadow-lg h-fit sticky top-24 space-y-6">
+
+            {/* Slider 1 */}
+            <div className="rounded-lg overflow-hidden shadow-lg bg-black/20">
+              <img 
+                src={imagesAd1[ad1Index]}
+                alt="Ad 1"
+                className="w-full rounded-lg transition-opacity duration-500"
+              />
+              <p className="text-center text-xs text-white/60 mt-2">
+                Anuncio simulado
+              </p>
+            </div>
+
+            {/* Slider 2 */}
+            <div className="rounded-lg overflow-hidden shadow-lg bg-black/20">
+              <img 
+                src={imagesAd2[ad2Index]}
+                alt="Ad 2"
+                className="w-full rounded-lg transition-opacity duration-500"
+              />
+              <p className="text-center text-xs text-white/60 mt-2">
+                Anuncio simulado
+              </p>
+            </div>
+
+          </aside>
+
         </div>
       </main>
 
@@ -227,17 +253,14 @@ const DashboardPage = () => {
       <button 
         className="md:hidden fixed top-20 left-4 z-30 bg-[#1E293B] p-2 rounded-lg text-white shadow-lg"
         onClick={toggleMenu}
-        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
       >
         {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-      {/* Mobile nav overlay */}
       {isMenuOpen && (
         <div 
           className="md:hidden fixed inset-0 bg-black/70 z-10"
           onClick={() => setIsMenuOpen(false)}
-          aria-hidden="true"
         ></div>
       )}
     </div>

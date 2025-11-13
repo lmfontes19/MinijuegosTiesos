@@ -407,6 +407,14 @@ export const SpacingLayerGame = () => {
     lastPlayerShotRef.current = 0;
     playerHitTimeRef.current = 0;
     keysRef.current = {};
+    
+    // Auto-scroll to game area
+    setTimeout(() => {
+      const gameArea = document.querySelector('[data-game-area="spacinglayer"]');
+      if (gameArea) {
+        gameArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
   };
 
   const endGame = () => {
@@ -562,9 +570,9 @@ export const SpacingLayerGame = () => {
                 <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 text-[#6366F1]" />
                 <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-[#6366F1]" />
               </div>
-              <div className="text-white font-medium text-sm">Mover</div>
-              <div className="text-gray-400 text-xs md:text-sm">Arrows ←→ o A/D</div>
-              <div className="text-gray-400 text-xs mt-1">Touch: Toca los lados</div>
+              <div className="text-white font-medium text-sm">Move</div>
+              <div className="text-gray-400 text-xs md:text-sm">Arrows ←→ or A/D</div>
+              <div className="text-gray-400 text-xs mt-1">Touch: Tap sides</div>
             </div>
             
             <div className="bg-[#0F172A]/40 rounded-lg p-3 md:p-4 border border-[#334155]">
@@ -666,7 +674,7 @@ export const SpacingLayerGame = () => {
         </div>
       )}
 
-      <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-3 md:p-6">
+      <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-3 md:p-6" data-game-area="spacinglayer">
         <div className="text-center mb-4">
           <h3 className="text-lg md:text-xl font-bold text-white mb-2">Defend the Earth</h3>
           <p className="text-gray-400 text-xs md:text-sm">
@@ -679,12 +687,12 @@ export const SpacingLayerGame = () => {
             <span className="hidden md:inline"> to shoot</span>
           </p>
           <p className="text-gray-400 text-xs mt-1 md:hidden">
-            Touch: Toca los lados para moverte, toca arriba para disparar
+            Touch: Tap sides to move, tap up to shoot
           </p>
         </div>
 
         <div className="flex justify-center overflow-hidden">
-          <div className="relative w-full max-w-[800px]">
+          <div className="relative w-full max-w-[min(95vw,900px)]">
             <canvas
               ref={canvasRef}
               width={CANVAS_WIDTH}
@@ -692,7 +700,7 @@ export const SpacingLayerGame = () => {
               className="rounded-lg border-2 border-[#64748B] shadow-lg w-full h-auto"
               style={{ 
                 aspectRatio: `${CANVAS_WIDTH}/${CANVAS_HEIGHT}`,
-                maxHeight: '70vh'
+                maxHeight: '65vh'
               }}
             />
           </div>

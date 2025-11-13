@@ -149,6 +149,14 @@ export const MemoramaGame = () => {
     setGameState('playing');
     setIsRunning(true);
     setIsNewRecord(false);
+    
+    // Auto-scroll to game area
+    setTimeout(() => {
+      const gameArea = document.querySelector('[data-game-area="memorama"]');
+      if (gameArea) {
+        gameArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
   };
 
   // Pause/Resume game
@@ -176,15 +184,15 @@ export const MemoramaGame = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Calculate grid dimensions
+  // Calculate grid dimensions with responsive breakpoints
   const getGridDimensions = () => {
     switch (difficulty) {
-      case 16: return 'grid-cols-4';
-      case 20: return 'grid-cols-5';
-      case 24: return 'grid-cols-6';
-      case 28: return 'grid-cols-7';
-      case 32: return 'grid-cols-8';
-      default: return 'grid-cols-4';
+      case 16: return 'grid-cols-4 sm:grid-cols-4'; // 4x4 siempre
+      case 20: return 'grid-cols-4 sm:grid-cols-5'; // 4 en mobile, 5 en desktop 
+      case 24: return 'grid-cols-4 sm:grid-cols-6'; // 4 en mobile, 6 en desktop
+      case 28: return 'grid-cols-4 sm:grid-cols-7'; // 4 en mobile, 7 en desktop 
+      case 32: return 'grid-cols-4 sm:grid-cols-8'; // 4 en mobile, 8 en desktop
+      default: return 'grid-cols-4 sm:grid-cols-4';
     }
   };
 
@@ -330,8 +338,10 @@ export const MemoramaGame = () => {
       )}
 
       {/* Card grid */}
-      <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-6">
-        <div className={`grid ${getGridDimensions()} gap-3 max-w-4xl mx-auto`}>
+      <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-3 md:p-6" data-game-area="memorama">
+        <div className={`grid ${getGridDimensions()} gap-2 md:gap-3 w-full mx-auto`} style={{
+          maxWidth: difficulty <= 24 ? 'min(600px, 90vw)' : '100%'
+        }}>
           {cards.map((card) => (
             <div
               key={card.id}
@@ -343,7 +353,7 @@ export const MemoramaGame = () => {
               } border-2 flex items-center justify-center overflow-hidden`}
             >
               {card.isFlipped || card.isMatched ? (
-                <div className="w-full h-full p-2">
+                <div className="w-full h-full p-1 md:p-2">
                   <img 
                     src={card.imageData.src}
                     alt={card.imageData.alt}
@@ -358,13 +368,13 @@ export const MemoramaGame = () => {
                     className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg hidden items-center justify-center"
                     style={{ backgroundColor: card.imageData.color }}
                   >
-                    <span className="text-white font-bold text-lg">{card.imageData.alt[0]}</span>
+                    <span className="text-white font-bold text-sm md:text-lg">{card.imageData.alt[0]}</span>
                   </div>
                 </div>
               ) : (
                 <div className="flex items-center justify-center w-full h-full">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#334155] to-[#475569] rounded-lg opacity-60 flex items-center justify-center">
-                    <div className="w-6 h-6 bg-[#1E293B] rounded opacity-80"></div>
+                  <div className="w-8 h-8 md:w-12 md:h-12 bg-gradient-to-br from-[#334155] to-[#475569] rounded-lg opacity-60 flex items-center justify-center">
+                    <div className="w-4 h-4 md:w-6 md:h-6 bg-[#1E293B] rounded opacity-80"></div>
                   </div>
                 </div>
               )}

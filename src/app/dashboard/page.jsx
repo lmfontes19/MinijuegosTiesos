@@ -204,46 +204,75 @@ const DashboardPage = () => {
       </aside>
 
       {/* MAIN CONTENT + ANUNCIOS */}
-      <main className="pt-16 md:pl-64 transition-all duration-300 flex-1 relative z-0 min-h-screen pb-16">
+      <main className="pt-16 md:pl-64 transition-all duration-300 flex-1 relative z-0 min-h-screen pb-4 md:pb-16">
         
-        <div className="flex gap-6">
+        <div className="flex flex-col xl:flex-row gap-4 md:gap-6">
 
           {/* CONTENIDO PRINCIPAL */}
           <div 
-            className={`flex-1 p-4 md:p-6 max-w-7xl mx-auto chat-open-adjustment ${
-              isChatOpen ? 'transform -translate-x-[225px]' : ''
+            className={`flex-1 p-2 md:p-4 lg:p-6 w-full xl:max-w-7xl mx-auto chat-open-adjustment transition-transform duration-300 ${
+              isChatOpen ? 'xl:transform xl:-translate-x-[225px]' : ''
             }`}
           >
             {renderContent()}
           </div>
 
-          {/* 🟣 COLUMNA DERECHA DE ANUNCIOS (SLIDER) */}
-          <aside className="hidden xl:block w-[260px] bg-[#1E293B]/60 border border-white/10 p-4 rounded-lg shadow-lg h-fit sticky top-24 space-y-6">
-
-            {/* Slider 1 */}
-            <div className="rounded-lg overflow-hidden shadow-lg bg-black/20">
-              <img 
-                src={imagesAd1[ad1Index]}
-                alt="Ad 1"
-                className="w-full rounded-lg transition-opacity duration-500"
-              />
-              <p className="text-center text-xs text-white/60 mt-2">
-                Anuncio simulado
-              </p>
+          {/* 🟣 COLUMNA DERECHA DE ANUNCIOS (SLIDER) - Responsive */}
+          <aside className="w-full xl:w-[260px] xl:min-w-[260px]">
+            {/* Mobile ads - horizontal layout */}
+            <div className="xl:hidden flex flex-col sm:flex-row gap-4 mb-6">
+              <div className="flex-1 bg-[#1E293B]/60 border border-white/10 p-3 rounded-lg shadow-lg">
+                <div className="relative overflow-hidden rounded-lg">
+                  <img 
+                    src={imagesAd1[ad1Index]}
+                    alt="Ad 1"
+                    className="w-full h-40 sm:h-32 object-cover transition-opacity duration-500"
+                  />
+                </div>
+                <p className="text-center text-xs text-white/60 mt-2">
+                  Simulated Advertisement
+                </p>
+              </div>
+              <div className="flex-1 bg-[#1E293B]/60 border border-white/10 p-3 rounded-lg shadow-lg">
+                <div className="relative overflow-hidden rounded-lg">
+                  <img 
+                    src={imagesAd2[ad2Index]}
+                    alt="Ad 2"
+                    className="w-full h-40 sm:h-32 object-cover transition-opacity duration-500"
+                  />
+                </div>
+                <p className="text-center text-xs text-white/60 mt-2">
+                  Simulated Advertisement
+                </p>
+              </div>
             </div>
+            
+            {/* Desktop ads - vertical layout */}
+            <div className="hidden xl:block bg-[#1E293B]/60 border border-white/10 p-4 rounded-lg shadow-lg h-fit sticky top-24 space-y-6">
+              {/* Slider 1 */}
+              <div className="rounded-lg overflow-hidden shadow-lg bg-black/20">
+                <img 
+                  src={imagesAd1[ad1Index]}
+                  alt="Ad 1"
+                  className="w-full rounded-lg transition-opacity duration-500"
+                />
+                <p className="text-center text-xs text-white/60 mt-2">
+                  Simulated Advertisement
+                </p>
+              </div>
 
-            {/* Slider 2 */}
-            <div className="rounded-lg overflow-hidden shadow-lg bg-black/20">
-              <img 
-                src={imagesAd2[ad2Index]}
-                alt="Ad 2"
-                className="w-full rounded-lg transition-opacity duration-500"
-              />
-              <p className="text-center text-xs text-white/60 mt-2">
-                Anuncio simulado
-              </p>
+              {/* Slider 2 */}
+              <div className="rounded-lg overflow-hidden shadow-lg bg-black/20">
+                <img 
+                  src={imagesAd2[ad2Index]}
+                  alt="Ad 2"
+                  className="w-full rounded-lg transition-opacity duration-500"
+                />
+                <p className="text-center text-xs text-white/60 mt-2">
+                  Simulated Advertisement
+                </p>
+              </div>
             </div>
-
           </aside>
 
         </div>

@@ -442,7 +442,7 @@ export const FlappyBirdGame = () => {
         </div>
       )}
 
-      <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-3 md:p-6">
+      <div className="bg-[#1E293B] rounded-lg border border-[#334155] p-3 md:p-6" data-game-area="flappybird">
         <div className="text-center mb-4">
           <h3 className="text-lg md:text-xl font-bold text-white mb-2">Fly between the pipes!</h3>
           <p className="text-gray-400 text-xs md:text-sm">
@@ -465,7 +465,7 @@ export const FlappyBirdGame = () => {
         </div>
 
         <div className="flex justify-center overflow-hidden">
-          <div className="relative w-full max-w-[480px]">
+          <div className="relative w-full max-w-[min(90vw,600px)]">
             <canvas
               ref={canvasRef}
               width={CANVAS_WIDTH}
@@ -473,7 +473,7 @@ export const FlappyBirdGame = () => {
               className="rounded-lg border-2 border-[#64748B] shadow-lg cursor-pointer w-full h-auto"
               style={{ 
                 aspectRatio: `${CANVAS_WIDTH}/${CANVAS_HEIGHT}`,
-                maxHeight: '80vh'
+                maxHeight: '65vh'
               }}
             />
           </div>

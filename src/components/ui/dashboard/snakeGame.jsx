@@ -202,7 +202,7 @@ export const SnakeGame = () => {
                 <ArrowRight className="w-5 h-5 text-[#6366F1]" />
               </div>
               <div className="text-white font-medium">Controles</div>
-              <div className="text-gray-400">Flechas ↑↓←→ o WASD</div>
+              <div className="text-gray-400">Arrows ↑↓←→ o WASD</div>
             </div>
             <div className="bg-[#0F172A]/40 rounded-lg p-4 border border-[#334155]">
               <Target className="w-5 h-5 text-[#EF4444] mx-auto mb-3" />

@@ -23,11 +23,11 @@ export const FlappyBirdGame = () => {
   const BIRD_SIZE = 30;
   const PIPE_WIDTH = 60;
   const PIPE_GAP = 220;
-  const GRAVITY = 0.4; // Increased for better gameplay
-  const JUMP_STRENGTH = -9; // Increased for better balance
-  const INITIAL_PIPE_SPEED = 3; // Original speed
+  const GRAVITY = 0.2;
+  const JUMP_STRENGTH = -6;
+  const INITIAL_PIPE_SPEED = 3;
   const SPEED_INCREASE = 0.5;
-  const PIPES_PER_LEVEL = 5; // Fixed to 5
+  const PIPES_PER_LEVEL = 1;
 
   // Game refs
   const birdRef = useRef({

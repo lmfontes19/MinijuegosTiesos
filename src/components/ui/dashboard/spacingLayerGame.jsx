@@ -563,7 +563,7 @@ export const SpacingLayerGame = () => {
                 <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-[#6366F1]" />
               </div>
               <div className="text-white font-medium text-sm">Mover</div>
-              <div className="text-gray-400 text-xs md:text-sm">Flechas ←→ o A/D</div>
+              <div className="text-gray-400 text-xs md:text-sm">Arrows ←→ o A/D</div>
               <div className="text-gray-400 text-xs mt-1">Touch: Toca los lados</div>
             </div>
             
@@ -578,21 +578,6 @@ export const SpacingLayerGame = () => {
               <Target className="w-4 h-4 md:w-5 md:h-5 text-[#EF4444] mx-auto mb-3" />
               <div className="text-white font-medium text-sm">Objective</div>
               <div className="text-gray-400 text-xs md:text-sm">Eliminate all aliens</div>
-            </div>
-          </div>
-
-          <div className="bg-[#0F172A]/40 rounded-lg p-3 md:p-4 border border-[#334155] mb-6 md:mb-8">D
-            <h3 className="text-white font-medium mb-2 text-sm md:text-base">Enemies and Score</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs md:text-sm">
-              <div className="text-gray-400">
-                <span className="text-[#EF4444]">■</span> Fast: 30 pts
-              </div>
-              <div className="text-gray-400">
-                <span className="text-[#F59E0B]">■</span> Medium: 20 pts
-              </div>
-              <div className="text-gray-400">
-                <span className="text-[#8B5CF6]">■</span> Slow: 10 pts
-              </div>
             </div>
           </div>
 

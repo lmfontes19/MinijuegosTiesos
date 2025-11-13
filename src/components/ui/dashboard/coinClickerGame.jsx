@@ -254,7 +254,6 @@ export const CoinClickGame = () => {
             }}
           >
             <div className="w-16 h-16 bg-gradient-to-br from-[#8B4513] to-[#654321] rounded-full flex items-center justify-center text-3xl font-bold border-4 border-[#A0522D] shadow-xl">
-              BOT
             </div>
           </div>
 

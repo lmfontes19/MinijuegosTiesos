@@ -82,18 +82,18 @@ const SignupFormContent = () => {
 
   // Generate months for the dropdown
   const months = [
-    { value: '01', label: 'January' },
-    { value: '02', label: 'February' },
-    { value: '03', label: 'March' },
-    { value: '04', label: 'April' },
-    { value: '05', label: 'May' },
-    { value: '06', label: 'June' },
-    { value: '07', label: 'July' },
-    { value: '08', label: 'August' },
-    { value: '09', label: 'September' },
-    { value: '10', label: 'October' },
-    { value: '11', label: 'November' },
-    { value: '12', label: 'December' }
+    { value: '01', label: 'Jan', fullLabel: 'January' },
+    { value: '02', label: 'Feb', fullLabel: 'February' },
+    { value: '03', label: 'Mar', fullLabel: 'March' },
+    { value: '04', label: 'Apr', fullLabel: 'April' },
+    { value: '05', label: 'May', fullLabel: 'May' },
+    { value: '06', label: 'Jun', fullLabel: 'June' },
+    { value: '07', label: 'Jul', fullLabel: 'July' },
+    { value: '08', label: 'Aug', fullLabel: 'August' },
+    { value: '09', label: 'Sep', fullLabel: 'September' },
+    { value: '10', label: 'Oct', fullLabel: 'October' },
+    { value: '11', label: 'Nov', fullLabel: 'November' },
+    { value: '12', label: 'Dec', fullLabel: 'December' }
   ];
 
   // Generate days for the dropdown
@@ -544,7 +544,7 @@ const SignupFormContent = () => {
                 <div className="grid grid-cols-3 gap-3">
                   {/* Day */}
                   <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10 pointer-events-none hidden sm:block">
                       <Calendar className="w-5 h-5" />
                     </div>
                     <select
@@ -552,19 +552,33 @@ const SignupFormContent = () => {
                       value={formData.birthDay}
                       onChange={handleChange}
                       disabled={isLoading}
-                      className={`w-full bg-[#0F172A] border ${errors.birthDay ? 'border-red-500' : 'border-gray-700'} rounded-lg py-3 px-10 text-white focus:outline-none focus:border-[#6366F1] transition-colors`}
+                      className={`w-full bg-[#0F172A] border ${errors.birthDay ? 'border-red-500' : 'border-gray-700'} rounded-lg py-3 px-3 sm:px-10 text-white focus:outline-none focus:border-[#6366F1] transition-colors appearance-none cursor-pointer
+                        ${formData.birthDay ? 'text-white' : 'text-gray-400'}
+                        [&>option]:bg-[#0F172A] [&>option]:text-white [&>option]:py-2
+                        [&>option:checked]:bg-[#6366F1] [&>option:checked]:text-white`}
+                      style={{
+                        colorScheme: 'dark',
+                        WebkitAppearance: 'none',
+                        MozAppearance: 'none'
+                      }}
                     >
-                      <option value="" disabled>Day</option>
+                      <option value="" disabled className="text-gray-400">Day</option>
                       {days.map(day => (
-                        <option key={day} value={day}>{day}</option>
+                        <option key={day} value={day} className="bg-[#0F172A] text-white py-2">{day}</option>
                       ))}
                     </select>
+                    {/* Custom dropdown arrow */}
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
                     {errors.birthDay && <p className="mt-1 text-red-500 text-xs">{errors.birthDay}</p>}
                   </div>
 
                   {/* Month */}
                   <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10 pointer-events-none hidden sm:block">
                       <Calendar className="w-5 h-5" />
                     </div>
                     <select
@@ -572,19 +586,33 @@ const SignupFormContent = () => {
                       value={formData.birthMonth}
                       onChange={handleChange}
                       disabled={isLoading}
-                      className={`w-full bg-[#0F172A] border ${errors.birthMonth ? 'border-red-500' : 'border-gray-700'} rounded-lg py-3 px-10 text-white focus:outline-none focus:border-[#6366F1] transition-colors`}
+                      className={`w-full bg-[#0F172A] border ${errors.birthMonth ? 'border-red-500' : 'border-gray-700'} rounded-lg py-3 px-3 sm:px-10 text-white focus:outline-none focus:border-[#6366F1] transition-colors appearance-none cursor-pointer
+                        ${formData.birthMonth ? 'text-white' : 'text-gray-400'}
+                        [&>option]:bg-[#0F172A] [&>option]:text-white [&>option]:py-2
+                        [&>option:checked]:bg-[#6366F1] [&>option:checked]:text-white`}
+                      style={{
+                        colorScheme: 'dark',
+                        WebkitAppearance: 'none',
+                        MozAppearance: 'none'
+                      }}
                     >
-                      <option value="" disabled>Month</option>
+                      <option value="" disabled className="text-gray-400">Month</option>
                       {months.map(month => (
-                        <option key={month.value} value={month.value}>{month.label}</option>
+                        <option key={month.value} value={month.value} className="bg-[#0F172A] text-white py-2">{month.label}</option>
                       ))}
                     </select>
+                    {/* Custom dropdown arrow */}
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
                     {errors.birthMonth && <p className="mt-1 text-red-500 text-xs">{errors.birthMonth}</p>}
                   </div>
 
                   {/* Year */}
                   <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10 pointer-events-none hidden sm:block">
                       <Calendar className="w-5 h-5" />
                     </div>
                     <select
@@ -592,13 +620,27 @@ const SignupFormContent = () => {
                       value={formData.birthYear}
                       onChange={handleChange}
                       disabled={isLoading}
-                      className={`w-full bg-[#0F172A] border ${errors.birthYear ? 'border-red-500' : 'border-gray-700'} rounded-lg py-3 px-10 text-white focus:outline-none focus:border-[#6366F1] transition-colors`}
+                      className={`w-full bg-[#0F172A] border ${errors.birthYear ? 'border-red-500' : 'border-gray-700'} rounded-lg py-3 px-3 sm:px-10 text-white focus:outline-none focus:border-[#6366F1] transition-colors appearance-none cursor-pointer
+                        ${formData.birthYear ? 'text-white' : 'text-gray-400'}
+                        [&>option]:bg-[#0F172A] [&>option]:text-white [&>option]:py-2
+                        [&>option:checked]:bg-[#6366F1] [&>option:checked]:text-white`}
+                      style={{
+                        colorScheme: 'dark',
+                        WebkitAppearance: 'none',
+                        MozAppearance: 'none'
+                      }}
                     >
-                      <option value="" disabled>Year</option>
+                      <option value="" disabled className="text-gray-400">Year</option>
                       {years.map(year => (
-                        <option key={year} value={year}>{year}</option>
+                        <option key={year} value={year} className="bg-[#0F172A] text-white py-2">{year}</option>
                       ))}
                     </select>
+                    {/* Custom dropdown arrow */}
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
                     {errors.birthYear && <p className="mt-1 text-red-500 text-xs">{errors.birthYear}</p>}
                   </div>
                 </div>
@@ -608,7 +650,7 @@ const SignupFormContent = () => {
               <motion.div variants={itemVariants} className="mb-5">
                 <label className="block text-gray-300 mb-2 text-sm">Gender</label>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10 pointer-events-none">
                     <User className="w-5 h-5" />
                   </div>
                   <select
@@ -616,14 +658,28 @@ const SignupFormContent = () => {
                     value={formData.gender}
                     onChange={handleChange}
                     disabled={isLoading}
-                    className={`w-full bg-[#0F172A] border ${errors.gender ? 'border-red-500' : 'border-gray-700'} rounded-lg py-3 px-10 text-white focus:outline-none focus:border-[#6366F1] transition-colors`}
+                    className={`w-full bg-[#0F172A] border ${errors.gender ? 'border-red-500' : 'border-gray-700'} rounded-lg py-3 px-10 text-white focus:outline-none focus:border-[#6366F1] transition-colors appearance-none cursor-pointer
+                      ${formData.gender ? 'text-white' : 'text-gray-400'}
+                      [&>option]:bg-[#0F172A] [&>option]:text-white [&>option]:py-2
+                      [&>option:checked]:bg-[#6366F1] [&>option:checked]:text-white`}
+                    style={{
+                      colorScheme: 'dark',
+                      WebkitAppearance: 'none',
+                      MozAppearance: 'none'
+                    }}
                   >
-                    <option value="" disabled>Select your gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                    <option value="prefer_not_to_say">Prefer not to say</option>
+                    <option value="" disabled className="text-gray-400">Select your gender</option>
+                    <option value="male" className="bg-[#0F172A] text-white py-2">Male</option>
+                    <option value="female" className="bg-[#0F172A] text-white py-2">Female</option>
+                    <option value="other" className="bg-[#0F172A] text-white py-2">Other</option>
+                    <option value="prefer_not_to_say" className="bg-[#0F172A] text-white py-2">Prefer not to say</option>
                   </select>
+                  {/* Custom dropdown arrow */}
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
                 </div>
                 {errors.gender && <p className="mt-1 text-red-500 text-xs">{errors.gender}</p>}
               </motion.div>

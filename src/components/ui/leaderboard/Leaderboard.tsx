@@ -1,8 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Clock, Users, User, ArrowUpRight } from 'lucide-react';
-import Image from 'next/image';
+import { Trophy, ArrowUpRight } from 'lucide-react';
 
 interface LeaderboardProps {
     isDashboard?: boolean;
@@ -13,9 +12,7 @@ interface LeaderboardData {
     rank: number;
     userId: number;
     username: string;
-    earnings: string;
-    tasks?: number;
-    referrals?: number;
+    score: number;
     isCurrentUser?: boolean;
 }
 
@@ -25,25 +22,52 @@ interface Prize {
 }
 
 const Leaderboard: React.FC<LeaderboardProps> = ({ isDashboard = false, currentUserId }) => {
-    const [activeLeaderboardType, setActiveLeaderboardType] = useState('personal');
+    const [activeLeaderboardType, setActiveLeaderboardType] = useState('snake');
     const [isLoading, setIsLoading] = useState(true);
-    const [personalData, setPersonalData] = useState<LeaderboardData[]>([]);
-    const [referralData, setReferralData] = useState<LeaderboardData[]>([]);
+    const [snakeData, setSnakeData] = useState<LeaderboardData[]>([]);
+    const [memoramaData, setMemoramaData] = useState<LeaderboardData[]>([]);
+    const [coinClickData, setCoinClickData] = useState<LeaderboardData[]>([]);
+    const [flappyBirdData, setFlappyBirdData] = useState<LeaderboardData[]>([]);
+    const [spacingLayerData, setSpacingLayerData] = useState<LeaderboardData[]>([]);
 
     const leaderboardTypes = [
-        { id: 'personal', name: 'Personal Earnings', icon: User, color: '#10B981' },
-        { id: 'referral', name: 'Referral Earnings', icon: Users, color: '#6366F1' }
+        { id: 'snake', name: 'Snake', icon: Trophy, color: '#10B981' },
+        { id: 'memorama', name: 'Memorama', icon: Trophy, color: '#6366F1' },
+        { id: 'coinClick', name: 'CoinClick', icon: Trophy, color: '#F59E0B' },
+        { id: 'flappyBird', name: 'Flappy Bird', icon: Trophy, color: '#EC4899' },
+        { id: 'spacingLayer', name: 'Spacing Layer', icon: Trophy, color: '#8B5CF6' }
     ];
 
     const prizes = {
-        personal: [
+        snake: [
             { rank: 1, amount: "$20" },
             { rank: 2, amount: "$10" },
             { rank: 3, amount: "$5" },
             { rank: "4-10", amount: "$3" },
             { rank: "11-20", amount: "$1" }
         ],
-        referral: [
+        memorama: [
+            { rank: 1, amount: "$20" },
+            { rank: 2, amount: "$10" },
+            { rank: 3, amount: "$5" },
+            { rank: "4-10", amount: "$3" },
+            { rank: "11-20", amount: "$1" }
+        ],
+        coinClick: [
+            { rank: 1, amount: "$20" },
+            { rank: 2, amount: "$10" },
+            { rank: 3, amount: "$5" },
+            { rank: "4-10", amount: "$3" },
+            { rank: "11-20", amount: "$1" }
+        ],
+        flappyBird: [
+            { rank: 1, amount: "$20" },
+            { rank: 2, amount: "$10" },
+            { rank: 3, amount: "$5" },
+            { rank: "4-10", amount: "$3" },
+            { rank: "11-20", amount: "$1" }
+        ],
+        spacingLayer: [
             { rank: 1, amount: "$20" },
             { rank: 2, amount: "$10" },
             { rank: 3, amount: "$5" },
@@ -53,77 +77,60 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ isDashboard = false, currentU
     };
 
     useEffect(() => {
-        const fetchData = async () => {
+        const loadData = () => {
             setIsLoading(true);
-            try {
-                const token = localStorage.getItem('CTtoken');
-                const headers: HeadersInit = {
-                    'Content-Type': 'application/json'
-                };
+            
+            // Datos hardcodeados para cada juego
+            const generateMockData = (baseScores: number[]): LeaderboardData[] => {
+                const usernames = ['Player1', 'GameMaster', 'ProGamer', 'SkillKing', 'TopPlayer', 
+                                 'Champion', 'Elite', 'Legend', 'Master', 'Ace'];
+                
+                return baseScores.map((score, index) => ({
+                    rank: index + 1,
+                    userId: index + 1,
+                    username: usernames[index],
+                    score: score,
+                    isCurrentUser: currentUserId === index + 1
+                }));
+            };
 
-                if (token) {
-                    headers['Authorization'] = `Bearer ${token}`;
-                }
-
-                const [personalResponse, referralResponse] = await Promise.all([
-                    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/leaderboard/earnings`, { headers }),
-                    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/leaderboard/referral`, { headers })
-                ]);
-
-                const personalResult = await personalResponse.json();
-                const referralResult = await referralResponse.json();
-
-                if (personalResult.success) {
-                    setPersonalData(personalResult.data);
-                }
-                if (referralResult.success) {
-                    setReferralData(referralResult.data);
-                }
-            } catch (error) {
-                console.error('Error fetching leaderboard data:', error);
-            } finally {
-                setIsLoading(false);
-            }
+            // Snake - puntos más altos
+            setSnakeData(generateMockData([15000, 12500, 10800, 9500, 8200, 7800, 6900, 6200, 5500, 4800]));
+            
+            // Memorama - tiempo en segundos (menor es mejor, pero mostramos como puntos)
+            setMemoramaData(generateMockData([8500, 7200, 6800, 6200, 5900, 5400, 5100, 4800, 4500, 4200]));
+            
+            // Coin Clicker - clicks por minuto
+            setCoinClickData(generateMockData([25000, 22000, 19500, 17800, 16200, 15000, 13800, 12500, 11200, 10000]));
+            
+            // Flappy Bird - distancia recorrida
+            setFlappyBirdData(generateMockData([9800, 8500, 7800, 7200, 6800, 6200, 5800, 5300, 4900, 4500]));
+            
+            // Spacing Layer - niveles completados
+            setSpacingLayerData(generateMockData([12000, 10500, 9800, 8900, 8200, 7600, 7100, 6500, 6000, 5500]));
+            
+            setIsLoading(false);
         };
 
-        fetchData();
-    }, []);
-
-    const renderPrizeSection = (type: string) => {
-        const currentPrizes = prizes[type as keyof typeof prizes];
-        const typeColor = leaderboardTypes.find(t => t.id === type)?.color;
-        
-        return (
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="bg-[#1E293B] rounded-lg border border-[#334155] p-6 mb-8"
-            >
-                <h3 className="text-xl font-bold text-white mb-4">
-                    Weekly Prize Pool - {type === 'personal' ? 'Personal' : 'Referral'}
-                </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-                    {currentPrizes.map((prize, index) => (
-                        <div key={index} className="bg-[#0F172A] rounded-lg p-4 text-center">
-                            <div className="flex items-center justify-center w-12 h-12 mx-auto rounded-full" 
-                                 style={{ backgroundColor: `${typeColor}20` }}>
-                                <Trophy style={{ color: typeColor }} className="w-6 h-6" />
-                            </div>
-                            <p className="text-gray-400 mt-3">Rank {prize.rank}</p>
-                            <p className="text-2xl font-bold text-white mt-1">{prize.amount}</p>
-                        </div>
-                    ))}
-                </div>
-            </motion.div>
-        );
-    };
+        loadData();
+    }, [currentUserId]);
 
     const renderUserStats = () => {
         if (!isDashboard || !currentUserId) return null;
 
-        const currentData = activeLeaderboardType === 'personal' ? personalData : referralData;
-        const userInfo = currentData?.find(user => user.userId === currentUserId || user.isCurrentUser);
+        const getDataForType = (type: string): LeaderboardData[] => {
+            switch(type) {
+                case 'snake': return snakeData;
+                case 'memorama': return memoramaData;
+                case 'coinClick': return coinClickData;
+                case 'flappyBird': return flappyBirdData;
+                case 'spacingLayer': return spacingLayerData;
+                default: return [];
+            }
+        };
+
+        const currentData = getDataForType(activeLeaderboardType);
+        const userInfo = currentData?.find((user: LeaderboardData) => user.userId === currentUserId || user.isCurrentUser);
         
         if (!userInfo) return null;
         
@@ -148,8 +155,8 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ isDashboard = false, currentU
                     <div className="bg-[#0F172A] rounded-lg p-5">
                         <div className="flex justify-between items-start">
                             <div>
-                                <p className="text-gray-400 text-sm">Weekly Earnings</p>
-                                <p className="text-3xl font-bold text-white mt-2">${userInfo.earnings}</p>
+                                <p className="text-gray-400 text-sm">High Score</p>
+                                <p className="text-3xl font-bold text-white mt-2">{userInfo.score.toLocaleString()}</p>
                             </div>
                             <div className="p-2 rounded-full bg-[#6366F1]/20">
                                 <Trophy className="w-6 h-6 text-[#6366F1]" />
@@ -162,7 +169,18 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ isDashboard = false, currentU
     };
 
     const renderLeaderboardTable = () => {
-        const data = activeLeaderboardType === 'personal' ? personalData : referralData;
+        const getDataForType = (type: string): LeaderboardData[] => {
+            switch(type) {
+                case 'snake': return snakeData;
+                case 'memorama': return memoramaData;
+                case 'coinClick': return coinClickData;
+                case 'flappyBird': return flappyBirdData;
+                case 'spacingLayer': return spacingLayerData;
+                default: return [];
+            }
+        };
+
+        const data = getDataForType(activeLeaderboardType);
         const typeConfig = leaderboardTypes.find(t => t.id === activeLeaderboardType);
         
         if (isLoading) {
@@ -189,14 +207,11 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ isDashboard = false, currentU
                         <tr className="text-left border-b border-gray-700">
                             <th className="py-4 px-4 text-gray-400">Rank</th>
                             <th className="py-4 px-4 text-gray-400">User</th>
-                            <th className="py-4 px-4 text-gray-400 text-right">Earnings</th>
-                            <th className="py-4 px-4 text-gray-400 text-right">
-                                {activeLeaderboardType === 'personal' ? 'Tasks' : 'Referrals'}
-                            </th>
+                            <th className="py-4 px-4 text-gray-400 text-right">High Score</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map((user) => (
+                        {data.map((user: LeaderboardData) => (
                             <tr 
                                 key={user.rank}
                                 className={`border-b border-gray-700/50 hover:bg-[#0F172A]/50 transition-colors ${
@@ -243,12 +258,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ isDashboard = false, currentU
                                         user.rank === 1 ? 'text-[#F59E0B]' : 
                                         user.rank <= 3 ? 'text-[#10B981]' : 'text-gray-300'
                                     }`}>
-                                        ${user.earnings}
-                                    </span>
-                                </td>
-                                <td className="py-4 px-4 text-right">
-                                    <span className="text-gray-300">
-                                        {activeLeaderboardType === 'personal' ? user.tasks : user.referrals}
+                                        {user.score.toLocaleString()}
                                     </span>
                                 </td>
                             </tr>
@@ -282,9 +292,6 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ isDashboard = false, currentU
             {/* User Stats (only in dashboard) */}
             {renderUserStats()}
             
-            {/* Prize Section */}
-            {renderPrizeSection(activeLeaderboardType)}
-            
             {/* Leaderboard Table */}
             <div className="bg-[#1E293B] rounded-xl shadow-lg overflow-hidden border border-[#334155]">
                 <div className="p-6 border-b border-gray-700">
@@ -315,8 +322,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ isDashboard = false, currentU
                     <div className="flex justify-center items-center space-x-6">
                         <ArrowUpRight className="w-16 h-16 text-[#10B981]" />
                         <p className="text-xl text-gray-300 max-w-2xl">
-                            Complete tasks and invite friends to earn rewards and climb the rankings. 
-                            Leaderboards reset weekly with real cash prizes!
+                            Play our games and compete for the top spots! 
                         </p>
                     </div>
                 </motion.div>

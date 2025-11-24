@@ -76,44 +76,59 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ isDashboard = false, currentU
         ],
     };
 
-    useEffect(() => {
-        const loadData = () => {
+    // Mapa del front -> slug usado en el backend PASO 1
+    const gameApiSlug: Record<string, string> = {
+        snake: 'snake',
+        memorama: 'memorama',
+        coinClick: 'coinclick',
+        flappyBird: 'flappybird',
+        spacingLayer: 'spacinglayer'
+    };
+
+useEffect(() => {
+    const loadData = async () => {
+        try {
             setIsLoading(true);
-            
-            // Datos hardcodeados para cada juego
-            const generateMockData = (baseScores: number[]): LeaderboardData[] => {
-                const usernames = ['Player1', 'GameMaster', 'ProGamer', 'SkillKing', 'TopPlayer', 
-                                 'Champion', 'Elite', 'Legend', 'Master', 'Ace'];
-                
-                return baseScores.map((score, index) => ({
-                    rank: index + 1,
-                    userId: index + 1,
-                    username: usernames[index],
-                    score: score,
-                    isCurrentUser: currentUserId === index + 1
-                }));
-            };
 
-            // Snake - puntos más altos
-            setSnakeData(generateMockData([15000, 12500, 10800, 9500, 8200, 7800, 6900, 6200, 5500, 4800]));
-            
-            // Memorama - tiempo en segundos (menor es mejor, pero mostramos como puntos)
-            setMemoramaData(generateMockData([8500, 7200, 6800, 6200, 5900, 5400, 5100, 4800, 4500, 4200]));
-            
-            // Coin Clicker - clicks por minuto
-            setCoinClickData(generateMockData([25000, 22000, 19500, 17800, 16200, 15000, 13800, 12500, 11200, 10000]));
-            
-            // Flappy Bird - distancia recorrida
-            setFlappyBirdData(generateMockData([9800, 8500, 7800, 7200, 6800, 6200, 5800, 5300, 4900, 4500]));
-            
-            // Spacing Layer - niveles completados
-            setSpacingLayerData(generateMockData([12000, 10500, 9800, 8900, 8200, 7600, 7100, 6500, 6000, 5500]));
-            
+            // obtener el slug correcto según el juego actual
+            const slug = gameApiSlug[activeLeaderboardType]; 
+
+            const res = await fetch(`http://localhost:3001/api/leaderboard/${slug}`);
+            const json = await res.json();
+
+            if (!json || !json.leaderboard) {
+                console.error("Formato inesperado del backend:", json);
+                return;
+            }
+
+            // adaptamos lo que viene del backend al formato del frontend
+            const formatted = json.leaderboard.map((item: any, index: number) => ({
+                rank: index + 1,
+                userId: item.userId || 0,
+                username: item.username || "Player",
+                score: item.score || 0,
+                isCurrentUser: currentUserId === item.userId
+            }));
+
+            // guardar en el estado adecuado
+            switch (activeLeaderboardType) {
+                case "snake": setSnakeData(formatted); break;
+                case "memorama": setMemoramaData(formatted); break;
+                case "coinClick": setCoinClickData(formatted); break;
+                case "flappyBird": setFlappyBirdData(formatted); break;
+                case "spacingLayer": setSpacingLayerData(formatted); break;
+            }
+
+        } catch (err) {
+            console.error("Error cargando leaderboard:", err);
+        } finally {
             setIsLoading(false);
-        };
+        }
+    };
 
-        loadData();
-    }, [currentUserId]);
+    loadData();
+}, [activeLeaderboardType, currentUserId]);
+
 
     const renderUserStats = () => {
         if (!isDashboard || !currentUserId) return null;

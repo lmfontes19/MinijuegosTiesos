@@ -10,6 +10,7 @@ export const FlappyBirdGame = () => {
   const { updateHighScore, getHighScore } = useGameHighScores();
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
+  const scoreRef = useRef(0);
   
   const [gameState, setGameState] = useState('menu'); // 'menu', 'playing', 'gameOver'
   const [score, setScore] = useState(0);
@@ -118,6 +119,7 @@ export const FlappyBirdGame = () => {
     frameRef.current = 0;
     currentSpeedRef.current = INITIAL_PIPE_SPEED;
     setScore(0);
+    scoreRef.current = 0;
     setIsNewRecord(false);
     setHasStarted(true); // Reset the state to wait for the first click
   };
@@ -129,9 +131,11 @@ export const FlappyBirdGame = () => {
 
   const endGame = () => {
     setGameState('gameOver');
-    const newRecord = updateHighScore('flappyBird', score);
-    setIsNewRecord(newRecord);
-    if (newRecord) setHighScore(score);
+    const finalScore = scoreRef.current;
+    updateHighScore('flappybird', finalScore).then((newRecord) => {
+      setIsNewRecord(newRecord);
+      if (newRecord) setHighScore(finalScore);
+    });
   };
 
   const backToMenu = () => {
@@ -176,7 +180,9 @@ export const FlappyBirdGame = () => {
         // Check if bird passed the pipe
         if (!pipe.passed && pipe.x + PIPE_WIDTH < birdRef.current.x) {
           pipe.passed = true;
-          setScore(prev => prev + 1);
+          const newScore = scoreRef.current + 1;
+          setScore(newScore);
+          scoreRef.current = newScore;
         }
 
         // Check collision with pipes

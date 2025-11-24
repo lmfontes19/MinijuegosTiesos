@@ -10,46 +10,118 @@ export const useGameHighScores = () => {
     snake: 0,
     spacingLayer: 0
   });
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Load high scores from localStorage
-  useEffect(() => {
-    const loadHighScores = () => {
-      const scores = {
-        coinClick: parseInt(localStorage.getItem('coinClick_highScore')) || 0,
-        flappyBird: parseInt(localStorage.getItem('flappyBird_highScore')) || 0,
-        memorama: parseInt(localStorage.getItem('memorama_highScore')) || 0,
-        snake: parseInt(localStorage.getItem('snake_highScore')) || 0,
-        spacingLayer: parseInt(localStorage.getItem('spacingLayer_highScore')) || 0
-      };
-      setHighScores(scores);
+  // API helper function
+  const getAuthToken = () => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('CTtoken');
+    }
+    return null;
+  };
+
+  // Load high scores from localStorage first, then sync with backend
+  const loadHighScores = () => {
+    const scores = {
+      coinClick: parseInt(localStorage.getItem('coinClick_highScore')) || 0,
+      flappyBird: parseInt(localStorage.getItem('flappyBird_highScore')) || 0,
+      memorama: parseInt(localStorage.getItem('memorama_highScore')) || 0,
+      snake: parseInt(localStorage.getItem('snake_highScore')) || 0,
+      spacingLayer: parseInt(localStorage.getItem('spacingLayer_highScore')) || 0
     };
+    setHighScores(scores);
+    return scores;
+  };
 
-    loadHighScores();
-
-    // Listen for changes in localStorage
-    const handleStorageChange = (e) => {
-      if (e.key && e.key.includes('_highScore')) {
-        loadHighScores();
+  // Load high scores from backend and update localStorage
+  const loadHighScoresFromBackend = async () => {
+    try {
+      const token = getAuthToken();
+      if (!token) {
+        setIsLoading(false);
+        return;
       }
-    };
 
-    window.addEventListener('storage', handleStorageChange);
-    
-    // Also listen for custom events for changes in the same tab
-    const handleHighScoreUpdate = () => {
-      loadHighScores();
-    };
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/scores/me`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
 
-    window.addEventListener('highScoreUpdated', handleHighScoreUpdate);
+      if (response.ok) {
+        const data = await response.json();
+        // Map backend game names to frontend game names and update localStorage
+        const mappedScores = {
+          coinClick: data.coinclick || 0,
+          flappyBird: data.flappybird || 0,
+          memorama: data.memorama || 0,
+          snake: data.snake || 0,
+          spacingLayer: data.spacinglayer || 0
+        };
+        
+        // Update localStorage with backend values
+        Object.keys(mappedScores).forEach(game => {
+          if (mappedScores[game] > 0) {
+            localStorage.setItem(`${game}_highScore`, mappedScores[game].toString());
+          }
+        });
+        
+        setHighScores(mappedScores);
+      } else {
+        console.error('Failed to fetch high scores');
+      }
+    } catch (error) {
+      console.error('Error loading high scores:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('highScoreUpdated', handleHighScoreUpdate);
-    };
+  // Save score to backend
+  const saveScoreToBackend = async (game, score) => {
+    try {
+      const token = getAuthToken();
+      if (!token) {
+        console.error('No auth token available');
+        return false;
+      }
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/scores/save`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          game: game,
+          score: score
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data.newRecord || false;
+      } else {
+        console.error('Failed to save score');
+        return false;
+      }
+    } catch (error) {
+      console.error('Error saving score:', error);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    // Load from localStorage first for immediate display
+    loadHighScores();
+    // Then sync with backend
+    loadHighScoresFromBackend();
   }, []);
 
   // Function to update a high score
-  const updateHighScore = (game, score) => {
+  const updateHighScore = async (game, score) => {
     const currentScore = highScores[game] || 0;
     
     // For memorama, a lower time is better
@@ -61,18 +133,16 @@ export const useGameHighScores = () => {
       isNewRecord = score > currentScore;
     }
     
+    // Always save the score to backend
+    await saveScoreToBackend(game, score);
+    
+    // Update local storage and state if it's a new record locally
     if (isNewRecord) {
       localStorage.setItem(`${game}_highScore`, score.toString());
       setHighScores(prev => ({
         ...prev,
         [game]: score
       }));
-      
-      // Trigger custom event to notify the change
-      window.dispatchEvent(new CustomEvent('highScoreUpdated', {
-        detail: { game, score, isNewRecord: true }
-      }));
-      
       return true;
     }
     
@@ -84,50 +154,16 @@ export const useGameHighScores = () => {
     return highScores[game] || 0;
   };
 
-  // Function to reset all high scores
-  const resetAllHighScores = () => {
-    Object.keys(highScores).forEach(game => {
-      localStorage.removeItem(`${game}_highScore`);
-    });
-    setHighScores({
-      coinClick: 0,
-      flappyBird: 0,
-      memorama: 0,
-      snake: 0,
-      spacingLayer: 0
-    });
-    window.dispatchEvent(new CustomEvent('highScoreUpdated'));
-  };
-
-  // Function to export high scores data
-  const exportHighScores = () => {
-    return JSON.stringify(highScores, null, 2);
-  };
-
-  // Function to import high scores data
-  const importHighScores = (scoresData) => {
-    try {
-      const scores = JSON.parse(scoresData);
-      Object.keys(scores).forEach(game => {
-        if (highScores.hasOwnProperty(game)) {
-          localStorage.setItem(`${game}_highScore`, scores[game].toString());
-        }
-      });
-      setHighScores(scores);
-      window.dispatchEvent(new CustomEvent('highScoreUpdated'));
-      return true;
-    } catch (error) {
-      console.error('Error importing high scores:', error);
-      return false;
-    }
+  // Function to refresh high scores from backend
+  const refreshHighScores = () => {
+    loadHighScoresFromBackend();
   };
 
   return {
     highScores,
     updateHighScore,
     getHighScore,
-    resetAllHighScores,
-    exportHighScores,
-    importHighScores
+    refreshHighScores,
+    isLoading
   };
 };

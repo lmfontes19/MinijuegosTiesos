@@ -120,12 +120,12 @@ export const MemoramaGame = () => {
             setIsRunning(false);
             
             // Update best time using the hook
-            const wasNewRecord = updateHighScore('memorama', timer);
-            setIsNewRecord(wasNewRecord);
-            
-            if (wasNewRecord) {
-              setBestTime(timer);
-            }
+            updateHighScore('memorama', formatHighScore(timer)).then((wasNewRecord) => {
+              setIsNewRecord(wasNewRecord);
+              if (wasNewRecord) {
+                setBestTime(timer);
+              }
+            });
           }
         } else {
           // No match, flip cards back
@@ -182,6 +182,10 @@ export const MemoramaGame = () => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const formatHighScore = (seconds) => {
+    return seconds + 1;
   };
 
   // Calculate grid dimensions with responsive breakpoints

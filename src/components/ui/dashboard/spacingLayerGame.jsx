@@ -419,9 +419,10 @@ export const SpacingLayerGame = () => {
 
   const endGame = () => {
     setGameState('gameOver');
-    const newRecord = updateHighScore('spacingLayer', level);
-    setIsNewRecord(newRecord);
-    if (newRecord) setHighScore(level);
+    updateHighScore('spacinglayer', level).then((newRecord) => {
+      setIsNewRecord(newRecord);
+      if (newRecord) setHighScore(level);
+    });
   };
 
   const backToMenu = () => {

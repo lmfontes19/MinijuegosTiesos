@@ -36,8 +36,11 @@ export const CoinClickGame = () => {
     }
     if (score > highScore) {
       setIsNewRecord(true);
-      updateHighScore('coinClick', score);
-      setHighScore(score);
+      updateHighScore('coinclick', score).then((wasNewRecord) => {
+        if (wasNewRecord) {
+          setHighScore(score);
+        }
+      });
     }
   }, [score, highScore, updateHighScore]);
 

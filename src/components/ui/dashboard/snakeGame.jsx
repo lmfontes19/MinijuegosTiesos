@@ -11,6 +11,7 @@ export const SnakeGame = () => {
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
   const lastUpdateRef = useRef(0);
+  const scoreRef = useRef(0);
   
   const [gameState, setGameState] = useState('menu'); // 'menu', 'playing', 'gameOver'
   const [score, setScore] = useState(0);
@@ -110,7 +111,9 @@ export const SnakeGame = () => {
 
       snake.unshift(newHead);
       if (newHead.x === foodRef.current.x && newHead.y === foodRef.current.y) {
-        setScore(prev => prev + 1);
+        const newScore = scoreRef.current + 1;
+        setScore(newScore);
+        scoreRef.current = newScore;
         foodRef.current = generateFood();
       } else {
         snake.pop();
@@ -147,6 +150,7 @@ export const SnakeGame = () => {
   const startGame = () => {
     setGameState('playing');
     setScore(0);
+    scoreRef.current = 0;
     snakeRef.current = [{ x: 10, y: 10 }];
     directionRef.current = { x: 0, y: 0 };
     nextDirectionRef.current = { x: 0, y: 0 };
@@ -167,9 +171,12 @@ export const SnakeGame = () => {
 
   const endGame = () => {
     setGameState('gameOver');
-    const newRecord = updateHighScore('snake', score);
-    setIsNewRecord(newRecord);
-    if (newRecord) setHighScore(score);
+    const finalScore = scoreRef.current;
+    // Handle async updateHighScore separately
+    updateHighScore('snake', finalScore).then((newRecord) => {
+      setIsNewRecord(newRecord);
+      if (newRecord) setHighScore(finalScore);
+    });
   };
 
   const backToMenu = () => {

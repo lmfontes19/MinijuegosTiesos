@@ -3,7 +3,7 @@ import { Trophy, Gamepad2 } from 'lucide-react';
 import { useGameHighScores } from '@/hooks/useGameHighScores';
 
 export const DashboardContent = ({ highScores: propHighScores }) => {
-  const { highScores: hookHighScores } = useGameHighScores();
+  const { highScores: hookHighScores, isLoading } = useGameHighScores();
   // Use props if provided, otherwise fallback to hook
   const highScores = propHighScores || hookHighScores;
 
@@ -15,7 +15,7 @@ export const DashboardContent = ({ highScores: propHighScores }) => {
           <Trophy className="w-5 h-5 mr-2 text-[#F59E0B]" />
           Your Game High Scores
         </h3>
-        {false ? (
+        {isLoading ? (
           <div className="flex justify-center items-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#F59E0B]"></div>
           </div>

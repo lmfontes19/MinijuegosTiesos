@@ -38,44 +38,6 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ isDashboard = false, currentU
         { id: 'spacingLayer', name: 'Spacing Layer', icon: Trophy, color: '#8B5CF6' }
     ];
 
-    const prizes = {
-        snake: [
-            { rank: 1, amount: "$20" },
-            { rank: 2, amount: "$10" },
-            { rank: 3, amount: "$5" },
-            { rank: "4-10", amount: "$3" },
-            { rank: "11-20", amount: "$1" }
-        ],
-        memorama: [
-            { rank: 1, amount: "$20" },
-            { rank: 2, amount: "$10" },
-            { rank: 3, amount: "$5" },
-            { rank: "4-10", amount: "$3" },
-            { rank: "11-20", amount: "$1" }
-        ],
-        coinClick: [
-            { rank: 1, amount: "$20" },
-            { rank: 2, amount: "$10" },
-            { rank: 3, amount: "$5" },
-            { rank: "4-10", amount: "$3" },
-            { rank: "11-20", amount: "$1" }
-        ],
-        flappyBird: [
-            { rank: 1, amount: "$20" },
-            { rank: 2, amount: "$10" },
-            { rank: 3, amount: "$5" },
-            { rank: "4-10", amount: "$3" },
-            { rank: "11-20", amount: "$1" }
-        ],
-        spacingLayer: [
-            { rank: 1, amount: "$20" },
-            { rank: 2, amount: "$10" },
-            { rank: 3, amount: "$5" },
-            { rank: "4-10", amount: "$3" },
-            { rank: "11-20", amount: "$1" }
-        ],
-    };
-
     // Mapa del front -> slug usado en el backend PASO 1
     const gameApiSlug: Record<string, string> = {
         snake: 'snake',
@@ -90,10 +52,31 @@ useEffect(() => {
         try {
             setIsLoading(true);
 
+            // Obtener el token del localStorage
+            const token = localStorage.getItem('CTtoken');
+            if (!token) {
+                console.error("No hay token de autenticación");
+                setIsLoading(false);
+                return;
+            }
+
             // obtener el slug correcto según el juego actual
             const slug = gameApiSlug[activeLeaderboardType]; 
 
-            const res = await fetch(`http://localhost:3001/api/leaderboard/${slug}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/scores/leaderboard/${slug}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (!res.ok) {
+                console.error("Error en la respuesta del servidor:", res.status);
+                setIsLoading(false);
+                return;
+            }
+
             const json = await res.json();
 
             if (!json || !json.leaderboard) {

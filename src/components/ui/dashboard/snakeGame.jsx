@@ -17,6 +17,8 @@ export const SnakeGame = () => {
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [isNewRecord, setIsNewRecord] = useState(false);
+  const [touchStart, setTouchStart] = useState({ x: 0, y: 0 });
+  const [touchEnd, setTouchEnd] = useState({ x: 0, y: 0 });
   
   const snakeRef = useRef([{ x: 10, y: 10 }]);
   const directionRef = useRef({ x: 0, y: 0 });
@@ -29,6 +31,54 @@ export const SnakeGame = () => {
     const currentHighScore = getHighScore('snake');
     setHighScore(currentHighScore);
   }, [getHighScore]);
+
+  const handleTouchStart = (e) => {
+    const firstTouch = e.touches[0];
+    setTouchStart({ x: firstTouch.clientX, y: firstTouch.clientY });
+  };
+
+  const handleTouchEnd = (e) => {
+    if (!touchStart.x || !touchStart.y) return;
+    
+    const firstTouch = e.changedTouches[0];
+    const touchEndX = firstTouch.clientX;
+    const touchEndY = firstTouch.clientY;
+    
+    const diffX = touchStart.x - touchEndX;
+    const diffY = touchStart.y - touchEndY;
+    
+    // Minimum swipe distance
+    const minSwipeDistance = 30;
+    
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      // Horizontal swipe
+      if (Math.abs(diffX) > minSwipeDistance) {
+        const currentDir = directionRef.current;
+        if (diffX > 0 && currentDir.x !== 1) {
+          // Swipe left
+          nextDirectionRef.current = { x: -1, y: 0 };
+        } else if (diffX < 0 && currentDir.x !== -1) {
+          // Swipe right
+          nextDirectionRef.current = { x: 1, y: 0 };
+        }
+      }
+    } else {
+      // Vertical swipe
+      if (Math.abs(diffY) > minSwipeDistance) {
+        const currentDir = directionRef.current;
+        if (diffY > 0 && currentDir.y !== 1) {
+          // Swipe up
+          nextDirectionRef.current = { x: 0, y: -1 };
+        } else if (diffY < 0 && currentDir.y !== -1) {
+          // Swipe down
+          nextDirectionRef.current = { x: 0, y: 1 };
+        }
+      }
+    }
+    
+    // Reset touch positions
+    setTouchStart({ x: 0, y: 0 });
+  };
 
   const generateFood = () => {
     let newFood;
@@ -179,6 +229,25 @@ export const SnakeGame = () => {
     });
   };
 
+  const handleDirectionButton = (direction) => {
+    const currentDir = directionRef.current;
+    
+    switch(direction) {
+      case 'up':
+        if (currentDir.y !== 1) nextDirectionRef.current = { x: 0, y: -1 };
+        break;
+      case 'down':
+        if (currentDir.y !== -1) nextDirectionRef.current = { x: 0, y: 1 };
+        break;
+      case 'left':
+        if (currentDir.x !== 1) nextDirectionRef.current = { x: -1, y: 0 };
+        break;
+      case 'right':
+        if (currentDir.x !== -1) nextDirectionRef.current = { x: 1, y: 0 };
+        break;
+    }
+  };
+
   const backToMenu = () => {
     setGameState('menu');
     if (animationRef.current) cancelAnimationFrame(animationRef.current);
@@ -217,7 +286,9 @@ export const SnakeGame = () => {
                 <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-[#6366F1]" />
               </div>
               <div className="text-white font-medium text-sm md:text-base">Controls</div>
-              <div className="text-gray-400 text-xs md:text-sm">Arrows ↑↓←→ or WASD</div>
+              <div className="text-gray-400 text-xs md:text-sm">
+                Arrows ↑↓←→, WASD, or swipe on mobile
+              </div>
             </div>
             <div className="bg-[#0F172A]/40 rounded-lg p-3 md:p-4 border border-[#334155]">
               <Target className="w-4 h-4 md:w-5 md:h-5 text-[#EF4444] mx-auto mb-3" />
@@ -305,7 +376,8 @@ export const SnakeGame = () => {
         <div className="text-center mb-3 md:mb-4">
           <h3 className="text-lg md:text-xl font-bold text-white mb-2">Eat the red apples!</h3>
           <p className="text-gray-400 text-xs md:text-sm">
-            Use arrow keys ↑↓←→ or WASD to move
+            <span className="hidden md:inline">Use arrow keys ↑↓←→ or WASD to move</span>
+            <span className="md:hidden">Swipe on game area or use buttons below</span>
           </p>
         </div>
 
@@ -319,8 +391,61 @@ export const SnakeGame = () => {
               style={{
                 maxHeight: '60vh'
               }}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
             />
           </div>
+        </div>
+
+        {/* Mobile Control Buttons */}
+        <div className="block md:hidden mt-4">
+          <div className="flex justify-center">
+            <div className="grid grid-cols-3 gap-2 w-48">
+              {/* Top row */}
+              <div></div>
+              <button
+                onClick={() => handleDirectionButton('up')}
+                className="bg-[#334155] hover:bg-[#475569] text-white p-3 rounded-lg transition-colors flex items-center justify-center active:bg-[#64748B]"
+                style={{ touchAction: 'manipulation' }}
+              >
+                <ArrowUp className="w-6 h-6" />
+              </button>
+              <div></div>
+              
+              {/* Middle row */}
+              <button
+                onClick={() => handleDirectionButton('left')}
+                className="bg-[#334155] hover:bg-[#475569] text-white p-3 rounded-lg transition-colors flex items-center justify-center active:bg-[#64748B]"
+                style={{ touchAction: 'manipulation' }}
+              >
+                <ArrowLeft className="w-6 h-6" />
+              </button>
+              <div className="flex items-center justify-center">
+                <div className="w-3 h-3 bg-[#10B981] rounded-full"></div>
+              </div>
+              <button
+                onClick={() => handleDirectionButton('right')}
+                className="bg-[#334155] hover:bg-[#475569] text-white p-3 rounded-lg transition-colors flex items-center justify-center active:bg-[#64748B]"
+                style={{ touchAction: 'manipulation' }}
+              >
+                <ArrowRight className="w-6 h-6" />
+              </button>
+              
+              {/* Bottom row */}
+              <div></div>
+              <button
+                onClick={() => handleDirectionButton('down')}
+                className="bg-[#334155] hover:bg-[#475569] text-white p-3 rounded-lg transition-colors flex items-center justify-center active:bg-[#64748B]"
+                style={{ touchAction: 'manipulation' }}
+              >
+                <ArrowDown className="w-6 h-6" />
+              </button>
+              <div></div>
+            </div>
+          </div>
+          <p className="text-center text-gray-400 text-xs mt-2">
+            Tap buttons or swipe on game area to move
+          </p>
         </div>
 
         <div className="text-center mt-3 md:mt-4">
@@ -333,7 +458,8 @@ export const SnakeGame = () => {
 
         <div className="mt-3 md:mt-4 text-center text-gray-400 text-xs md:text-sm">
           <p>■ = Snake | ● = Food</p>
-          <p className="mt-1">Press any arrow key or WASD to start moving</p>
+          <p className="mt-1 hidden md:block">Press any arrow key or WASD to start moving</p>
+          <p className="mt-1 block md:hidden">Swipe or use buttons below to move</p>
         </div>
       </div>
     </div>
